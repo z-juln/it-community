@@ -1,6 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
-import './App.css';
+import "juln-color";
+import "juln-color/lib/theme.css";
 
 function App() {
   return (
