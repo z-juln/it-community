@@ -1,23 +1,19 @@
-import React from 'react';
-import ReactDOM from 'react-dom';
-import { BrowserRouter as Router } from "react-router-dom";
-import { Route } from 'react-router';
-import { RecoilRoot } from 'recoil';
-import reportWebVitals from './reportWebVitals';
-import './styles/global.scss';
+import React from "react";
+import ReactDOM from "react-dom";
+import { RecoilRoot } from "recoil";
+import reportWebVitals from "./reportWebVitals";
+import Router from "./router";
+import "./styles/global.scss";
 import "juln-color";
 import "juln-color/lib/theme.css";
 
 ReactDOM.render(
   <React.StrictMode>
     <RecoilRoot>
-      <Router>
-        <Route path="/" element={<>HOME</>} />
-        <Route path="about" element={<>ABOUT</>} />
-      </Router>
+      <Router />
     </RecoilRoot>
   </React.StrictMode>,
-  document.getElementById('root')
+  document.getElementById("root")
 );
 
 // If you want to start measuring performance in your app, pass a function
