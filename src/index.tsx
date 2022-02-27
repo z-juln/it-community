@@ -1,9 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { RecoilRoot } from "recoil";
-import reportWebVitals from "./reportWebVitals";
+import reportWebVitals from "@/reportWebVitals";
 import Router from "./router";
-import "./styles/global.scss";
+import "@/styles/global.scss";
 import "juln-color";
 import "juln-color/lib/theme.css";
 

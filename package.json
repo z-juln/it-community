@@ -21,10 +21,10 @@
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "start": "react-app-rewired start",
+    "build": "react-app-rewired build",
+    "test": "react-app-rewired test",
+    "eject": "react-app-rewired eject"
   },
   "browserslist": {
     "production": [
@@ -40,9 +40,11 @@
   },
   "devDependencies": {
     "@umijs/fabric": "^2.10.2",
+    "customize-cra": "^1.0.0",
     "eslint": "^8.10.0",
     "eslint-plugin-react": "^7.29.2",
     "eslint-plugin-unicorn": "^41.0.0",
+    "react-app-rewired": "^2.2.1",
     "sass": "^1.49.9",
     "sass-loader": "^12.6.0"
   }
