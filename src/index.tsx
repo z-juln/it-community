@@ -1,12 +1,21 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './styles/global.scss';
-import App from './App';
+import { BrowserRouter as Router } from "react-router-dom";
+import { Route } from 'react-router';
+import { RecoilRoot } from 'recoil';
 import reportWebVitals from './reportWebVitals';
+import './styles/global.scss';
+import "juln-color";
+import "juln-color/lib/theme.css";
 
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <RecoilRoot>
+      <Router>
+        <Route path="/" element={<>HOME</>} />
+        <Route path="about" element={<>ABOUT</>} />
+      </Router>
+    </RecoilRoot>
   </React.StrictMode>,
   document.getElementById('root')
 );

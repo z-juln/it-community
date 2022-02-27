@@ -1,5 +1,5 @@
 module.exports = {
-  extends: [require.resolve("@umijs/fabric/dist/eslint")],
+  extends: [require.resolve("@umijs/fabric/dist/eslint"), "react-app"],
 
   // in antd-design-pro
   globals: {
