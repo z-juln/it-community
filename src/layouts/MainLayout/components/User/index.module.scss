@@ -1,0 +1,14 @@
+.User {
+  display: flex;
+  align-items: center;
+  justify-content: space-evenly;
+  width: 100px;
+
+  &:not(.isLogin) {
+    height: 60px;
+    overflow: hidden;
+  }
+
+  &.isLogin {
+  }
+}

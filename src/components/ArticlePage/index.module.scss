@@ -1,0 +1,76 @@
+.ArticlePage {
+  display: flex;
+  .article-suspended-panel {
+    position: fixed;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+    padding: 20px;
+    padding-right: 0;
+    .panelBtn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      height: 48px;
+      margin-bottom: 40%;
+      font-size: 20px;
+      background-color: var(--bg);
+      border-radius: 50%;
+      box-shadow: 0 0 2px var(--mask);
+      cursor: pointer;
+      &:hover {
+        box-shadow: 0 0 4px var(--mask);
+      }
+    }
+  }
+
+  .rightBody {
+    flex: 1;
+    margin-left: 80px;
+    padding: 20px;
+
+    & > article {
+      padding: 20px;
+      background-color: var(--bg);
+      h2 {
+        font-size: 28px;
+      }
+      .content {
+        min-height: calc(100vh - 410px);
+        padding-top: 10px;
+      }
+      .cardList {
+        display: flex;
+        flex-wrap: wrap;
+        min-height: calc(100vh - 400px);
+      }
+    }
+  }
+
+  section.commends {
+    width: 100%;
+    min-height: 200px;
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--bg);
+    .commentForm {
+      display: flex;
+      margin-top: 20px;
+      margin-bottom: 20px;
+      .textarea {
+        margin-left: 20px;
+        resize: none;
+      }
+    }
+    .commendTree {
+      margin-top: 20px;
+      .commendItem {
+        margin-top: 12px;
+      }
+      .commendItem:nth-child(1) {
+        margin-top: 0;
+      }
+    }
+  }
+}

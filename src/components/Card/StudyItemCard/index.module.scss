@@ -1,0 +1,27 @@
+.StudyItemCard {
+  .card {
+    box-sizing: border-box;
+    width: 200px;
+    height: 120px;
+    margin-top: 20px;
+    margin-right: 20px;
+    padding: 10px;
+    background-color: var(--bg_card);
+    border-radius: 6px;
+    box-shadow: 0 0 2px var(--mask);
+    &:hover {
+      box-shadow: 0 0 6px var(--mask);
+    }
+    .title {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .content {
+      height: 50px;
+    }
+    .subData {
+      color: var(--secondary_text);
+      font-size: 12px;
+    }
+  }
+}

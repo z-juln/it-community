@@ -1,0 +1,37 @@
+.CommonCard {
+  .Card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-sizing: border-box;
+    width: 300px;
+    padding: 10px;
+    background-color: var(--bg_card);
+    border-radius: 6px;
+    box-shadow: 0 0 2px var(--mask);
+    &:hover {
+      box-shadow: 0 0 6px var(--mask);
+    }
+    .left {
+      height: 100%;
+      margin-right: 10px;
+    }
+    .name {
+      font-weight: bold;
+      font-size: 18px;
+    }
+    .detail {
+      height: 50px;
+    }
+    .subData {
+      color: var(--secondary_text);
+      font-size: 12px;
+    }
+    .cover,
+    .cover img {
+      width: 100px;
+      height: 100px;
+      border-radius: 4px;
+    }
+  }
+}

@@ -1,0 +1,46 @@
+.MainLayout {
+  .tabBar {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    height: 60px;
+    background-color: var(--bg);
+    box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 136px;
+      height: 28px;
+      margin-left: 24px;
+      color: var(--white_text);
+      font-weight: bold;
+      background: radial-gradient(
+        var(--disable_text),
+        var(--primary_color) 40%,
+        var(--primary_color) 60%,
+        var(--disable_text)
+      );
+      border-radius: 10px;
+      box-shadow: 0 1px 2px 0 rgb(0 0 0 / 5%);
+    }
+
+    .topMenuList {
+      display: flex;
+      align-items: center;
+      margin-left: 20px;
+    }
+
+    .rightNav {
+      margin-left: auto;
+    }
+  }
+
+  .pageBody {
+    min-height: calc(100vh - 60px);
+    background-color: var(--bg_click);
+  }
+}

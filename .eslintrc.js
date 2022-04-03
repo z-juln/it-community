@@ -8,6 +8,6 @@ module.exports = {
   },
 
   rules: {
-    // your rules
+    "@typescript-eslint/no-shadow": 0,
   },
 };

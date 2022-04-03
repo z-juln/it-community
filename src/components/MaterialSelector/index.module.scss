@@ -1,0 +1,18 @@
+.MaterialSelector {
+  .selectBox {
+    & > ul > li {
+      margin-bottom: 20px;
+      padding: 20px;
+      border: 1px solid lightgray;
+      opacity: 0.7;
+      &.actived {
+        border-color: var(--primary_color);
+        opacity: 1;
+      }
+    }
+  }
+  .ensureBtn {
+    display: block;
+    margin-left: auto;
+  }
+}

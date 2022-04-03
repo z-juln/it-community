@@ -1,0 +1,9 @@
+.DropdownMenuList {
+  :global(.ant-dropdown-menu-item) {
+    padding: 10px 30px;
+  }
+
+  .actived {
+    color: var(--primary_color);
+  }
+}

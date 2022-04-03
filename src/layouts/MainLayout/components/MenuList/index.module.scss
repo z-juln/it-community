@@ -1,0 +1,10 @@
+.MenuList {
+  .menuItem {
+    padding: 0 8px;
+    color: var(--primary_text);
+    cursor: pointer;
+    &.actived {
+      color: var(--primary_color);
+    }
+  }
+}

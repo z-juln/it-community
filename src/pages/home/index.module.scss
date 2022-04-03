@@ -1,0 +1,64 @@
+.Home {
+  padding: 20px;
+
+  .searchBar {
+    display: flex;
+    .zoneSelector {
+      :global(.ant-select-selector) {
+        width: 100px !important;
+        height: 40px !important;
+      }
+      :global(.ant-select-selection-item) {
+        transform: translateY(4px);
+      }
+    }
+  }
+
+  .searchBar {
+    margin-bottom: 20px;
+  }
+
+  h2.title {
+    display: flex;
+    align-items: center;
+    .moreBtn {
+      margin-left: auto;
+    }
+  }
+
+  section.hotStudyRoute,
+  section.hotStudySet {
+    margin: 14px 0;
+    & > ul {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      padding: 6px;
+      padding-right: 0;
+      overflow: hidden;
+    }
+
+    &:not(.more) > ul {
+      height: 134px;
+    }
+
+    &.more > ul {
+      overflow: visible;
+    }
+  }
+
+  .Card {
+    margin-right: 20px;
+    margin-bottom: 10px;
+  }
+
+  .moreBtn {
+    color: var(--secondary_text);
+    font-size: 16px;
+    text-align: right;
+
+    .text:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,42 @@
+.Ranking {
+  display: flex;
+  width: 100%;
+  height: calc(100vh - 60px);
+  .list {
+    width: 50%;
+    height: 100%;
+    h2 {
+      text-align: center;
+      padding: 4px;
+    }
+  }
+  .hotList {
+    border-right: 1px solid lightgray;
+  }
+  .providerList {
+
+  }
+  .innerList {
+    position: relative;
+  }
+  .innerList li {
+    display: flex;
+    margin: 0 10px;
+    width: calc(100% - 20px);
+    padding: 10px 4px;
+    border-top: 1px solid lightgray;
+    border-bottom: 1px solid lightgray;
+    .rank {
+      width: 20px;
+      color: var(--primary_button);
+    }
+    .userInfo {
+      flex: 1;
+    }
+  }
+  .me {
+    width: calc(50% - 20px) !important;
+    position: fixed;
+    bottom: 0;
+  }
+}
