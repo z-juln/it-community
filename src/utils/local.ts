@@ -7,9 +7,14 @@ export function get(key: string) {
   return localStr ? JSON.parse(localStr) : null;
 }
 
+export function remove(key: string) {
+  localStorage.removeItem(key);
+}
+
 export const local = {
   save,
   get,
+  remove,
 };
 
 export default local;

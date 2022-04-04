@@ -8,7 +8,11 @@ const userInfoState = atom<User | null>({
   effects_UNSTABLE: [
     ({ onSet }) => {
       onSet((userInfo) => {
-        local.save("userInfo", userInfo);
+        if (userInfo === null) {
+          local.remove('userInfo');
+        } else {
+          local.save("userInfo", userInfo);
+        }
       });
     },
   ],

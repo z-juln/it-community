@@ -25,6 +25,7 @@ const User: React.FC<UserProps> = ({ className = "", style = {} }) => {
     setUserInfo(null);
     apis.logout();
     navigate("/");
+    window.location.reload();
   };
 
   return (
