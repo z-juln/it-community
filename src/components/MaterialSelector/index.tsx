@@ -37,9 +37,7 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
               className={selectedTemplateType === type ? styles.actived : ""}
               key={type}
               onClick={() => {
-                if (!selectedCtx) {
-                  setSelectedCtx(templateMap[type as MaterialType]);
-                }
+                setSelectedCtx(templateMap[type as MaterialType]);
               }}
             >
               <Material

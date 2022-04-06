@@ -4,22 +4,22 @@ import { MaterialBaseProps, MaterialType } from "../../model";
 import type { Ctx } from "./model";
 import { Button, Input } from "antd";
 
-export interface SingleChoiceProps extends MaterialBaseProps<Ctx> {
+export interface MultChoiceProps extends MaterialBaseProps<Ctx> {
   initCtx?: Ctx;
 }
 
 export const ctxTemplate: Ctx = {
-  type: MaterialType.SINGLE_CHOICE,
-  title: "单选题学点xxx",
+  type: MaterialType.MULT_CHOICE,
+  title: "多选题学点xxx",
   content: {
     a: "aaa",
     b: "bbb",
     c: "ccc",
   },
-  answer: "a",
+  answer: "a,b",
 };
 
-export const SingleChoice: React.FC<SingleChoiceProps> = ({
+export const MultChoice: React.FC<MultChoiceProps> = ({
   className = "",
   style = {},
   showTemplateCtxBox = false,
@@ -43,7 +43,7 @@ export const SingleChoice: React.FC<SingleChoiceProps> = ({
   }, [configValue]);
 
   return (
-    <div className={`${className} ${styles.SingleChoice}`} style={style}>
+    <div className={`${className} ${styles.MultChoice}`} style={style}>
       {!error && ctx ? (
         <article>
           <p className="title">{ctx.title}</p>
@@ -95,4 +95,4 @@ export const SingleChoice: React.FC<SingleChoiceProps> = ({
   );
 };
 
-export default memo(SingleChoice);
+export default memo(MultChoice);

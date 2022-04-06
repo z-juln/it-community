@@ -2,6 +2,7 @@ import { CommonProps } from "@/@types/global";
 
 export enum MaterialType {
   SINGLE_CHOICE = "single-choice",
+  MULT_CHOICE = "mult-choice",
 }
 
 export interface MaterialBaseCtx {
