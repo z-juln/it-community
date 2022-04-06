@@ -41,7 +41,12 @@ export const Home: React.FC<HomeProps> = () => {
       .then((res) => {
         setStudyRouteList(res.data);
       });
-    apis.getStudySetList(keyword, currentZoneId, 0, 6).then((res) => {
+    apis.getStudySetList({
+      keyword,
+      zone_id: currentZoneId,
+      pageIndex: 0,
+      pageNum: 6,
+    }).then((res) => {
       setStudySetList(res.data);
     });
     setSearchLoading(false);

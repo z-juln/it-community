@@ -7,12 +7,15 @@ import { userInfoState } from "@/store";
 import styles from "./index.module.scss";
 import StudySetCreation from "./inner/StudySetCreation";
 import StudyItemCreation from "./inner/StudyItemCreation";
+import StudySetLibs from "./inner/StudySetLibs";
+import StudyRouteLibs from "./inner/StudyRouteLibs";
+import StudyRouteCreation from "./inner/StudyRouteCreation";
 
 function checkAuth(role: User["role"]) {
   return [UserRole.ADMIN, UserRole.PROVIDER].includes(role);
 }
 
-enum TabKey {
+export enum TabKey {
   studyRouteLibs = "studyRouteLibs",
   studySetLibs = "studySetLibs",
   studyRouteCreation = "studyRouteCreation",
@@ -51,11 +54,11 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
   const mainElement = (() => {
     switch (tab) {
       case TabKey.studyRouteLibs:
-        return <StudySetCreation />;
+        return <StudyRouteLibs />;
       case TabKey.studySetLibs:
-        return <StudySetCreation />;
+        return <StudySetLibs setTab={setTab} />;
       case TabKey.studyRouteCreation:
-        return <StudySetCreation />;
+        return <StudyRouteCreation />;
       case TabKey.studySetCreation:
         return <StudySetCreation />;
       case TabKey.studyItemCreation:
@@ -77,7 +80,7 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
         <Menu.SubMenu key="add" title="新建">
           <Menu.Item key="studyRouteCreation">学习路线</Menu.Item>
           <Menu.Item key="studySetCreation">学库</Menu.Item>
-          <Menu.Item key="studySetCreation">学点</Menu.Item>
+          <Menu.Item key="studyItemCreation">学点</Menu.Item>
         </Menu.SubMenu>
       </Menu>
 

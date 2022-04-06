@@ -1,15 +1,23 @@
 import React, { memo, useEffect, useRef, useState } from "react";
 import styles from "./index.module.scss";
-import { Button, Input, notification, Select } from "antd";
+import { Button, Form, Input, notification, Select } from "antd";
 import { useRecoilState } from "recoil";
 import { userInfoState } from "@/store";
 import Material from "@/components/Material";
-import * as apis from "@/apis";
+import * as zoneApis from "@/apis/zone";
+import * as apis from '@/apis/studySet';
 import type { CommonProps } from "@/@types/global";
 import { MaterialBaseCtx } from "@/components/Material/model";
-import MaterialSelector from "@/components/MaterialSelector";
-import { StudyRoute } from "@/model";
+import { StudyRoute, Zone } from "@/model";
 import { useNavigate } from "react-router";
+
+export interface FormField {
+  zone_id: number;
+  name: string;
+  cover: string;
+  detail: string;
+  links: string;
+}
 
 export interface StudySetCreationProps extends CommonProps {}
 
@@ -18,220 +26,88 @@ const StudySetCreation: React.FC<StudySetCreationProps> = ({
   style = {},
 }) => {
   const navigate = useNavigate();
+  const [form] = Form.useForm<FormField>();
+  const [zoneList, setZoneList] = useState<Zone[]>([]);
   const [userInfo, setUserInfo] = useRecoilState(userInfoState);
-  const [visibleOfTemplateModal, setVisibleOfTemplateModal] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   if (!userInfo) {
     throw new Error("用户信息不存在");
   }
 
-  const [title, setTitle] = useState("");
-  const [studyRouteList, setStudyRouteList] = useState<StudyRoute[]>([]);
-  const [selectedStudyRouteId, setSelectedStudyRouteId] = useState<
-    number | null
-  >(null);
-  const articleRef = useRef<HTMLElement>(null);
-  enum DisplayMode {
-    editing = "editing",
-    preview = "preview",
-  }
-  const [displayMode, setDisplayMode] = useState(DisplayMode.editing);
-
   useEffect(() => {
-    apis
-      .getStudyRouteList({
-        ownId: userInfo.uid,
-      })
-      .then(({ data }) => {
-        setStudyRouteList(data);
-      });
-  }, [userInfo]);
-
-  type ArticleNode = {
-    key?: any;
-    $$typeof: string;
-    content: string | MaterialBaseCtx;
-  };
-  const createHostArticleNode = (innerHtml: string) => ({
-    $$typeof: "HOST",
-    content: innerHtml,
-  });
-  const initRow: ArticleNode = {
-    $$typeof: "HOST",
-    content: "写点什么吧...",
-  };
-  const br: ArticleNode = {
-    $$typeof: "HOST",
-    content: "<br />",
-  };
-  const [tempContentNodes, setTempContentNodes] = useState<ArticleNode[]>([
-    initRow,
-  ]);
-  const articleContent = tempContentNodes.map((node) => {
-    if (node.$$typeof === "HOST" && typeof node.content === "string") {
-      return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
-    } else if (typeof node.content !== "string") {
-      return (
-        <div contentEditable={false} data-material-key={node.key ?? false}>
-          <Material
-            initCtx={node.content}
-            showTemplateCtxBox={displayMode === DisplayMode.editing}
-          />
-        </div>
-      );
-    }
-  });
-
-  const handleSelect = (ctx: MaterialBaseCtx) => {
-    setTempContentNodes((content) => [
-      ...content,
-      br,
-      {
-        key: `${Date.now()}`,
-        $$typeof: "Material",
-        content: ctx,
-      },
-      br,
-    ]);
-  };
-
-  const getSubmitData = () => {
-    const splitStr = "--@it@--";
-    const articleNativeElement = articleRef.current;
-    if (!articleNativeElement) {
-      throw new Error("找不到 articleNativeElement");
-    }
-    const shadowArticle = document.createElement("article");
-    shadowArticle.innerHTML = articleNativeElement.innerHTML;
-    const meterialNativeElements = Array.from(
-      shadowArticle.querySelectorAll("[data-material-key]")
-    );
-    meterialNativeElements.forEach(
-      (el) =>
-        (el.outerHTML = `${splitStr}--@material-key@--:${el.getAttribute(
-          "data-material-key"
-        )}${splitStr}`)
-    );
-    const result = shadowArticle.innerHTML
-      .split(splitStr)
-      .map((htmlStrOrKey) => {
-        if (htmlStrOrKey.match(/--@material-key@--:.*?/)) {
-          const key = htmlStrOrKey.split("--@material-key@--:")[1];
-          console.log({ key });
-          return tempContentNodes.find((tempNode) => tempNode.key === key);
-        } else {
-          return createHostArticleNode(htmlStrOrKey);
-        }
-      });
-    return result;
-  };
+    zoneApis.getZoneList().then(res => {
+      setZoneList(res.data);
+    });
+  }, []);
 
   const handleSumbit = () => {
-    if (!selectedStudyRouteId || !title) {
-      notification.error({
-        message: "提交失败",
-        description: !selectedStudyRouteId ? "归属学库未选择" : "请填写标题",
-        duration: 3,
-      });
-      return;
-    }
-
-    const data = getSubmitData();
-    const dataStr = JSON.stringify(data);
-    console.log({ submitData: data });
-    apis
-      .postArticle({
-        setId: selectedStudyRouteId,
-        content: dataStr,
-        // TODO detail
-        detail: "",
-        title,
-      })
-      .then(({ data }) => {
-        if (!data) {
-          notification.error({
-            message: "文章发布失败",
-            description: "原因未知",
-            duration: 3,
+    form.validateFields()
+      .then(formFileds => {
+        apis
+          .addStudySet(formFileds)
+          .then(({ data }) => {
+            if (!data) {
+              notification.error({
+                message: "创建学库失败",
+                description: "原因未知",
+                duration: 3,
+              });
+              return;
+            }
+            navigate(`/published?title=${data.name}&id=${data.id}&type=set`);
           });
-          return;
-        }
-        navigate(`/published?title=${title}&id=${data.articleId}`);
       });
   };
 
   return (
     <div className={`${className} ${styles.StudySetCreation}`} style={style}>
-      <div className={styles.editLine}>
-        <Button
-          className={styles.addTemplateBtn}
-          onClick={() => setVisibleOfTemplateModal(true)}
+      <div className={styles.container}>
+        <h1>创建学库</h1>
+        <Form
+          form={form}
+          layout='horizontal'
+          initialValues={{ status: 'all' }}
         >
-          添加模板
+          <Form.Item
+            name='name'
+            label='学库名'
+            rules={[{required: true, message: '学库名不能为空'}]}
+          >
+            <Input placeholder="请输入学库名" />
+          </Form.Item>
+          <Form.Item
+            name='zone_id'
+            label='所属专区'
+            rules={[{required: true, message: '所属专区不能为空'}]}
+          >
+            <Select
+              placeholder='请选择所属专区'
+            >
+              {zoneList.map(zone => (
+                <Select.Option value={zone.id}>{zone.name}</Select.Option>
+              ))}
+            </Select>
+          </Form.Item>
+          {/* cover */}
+          <Form.Item
+            name='detail'
+            label='描述'
+            rules={[{required: true, message: '描述不能为空'}]}
+          >
+            <Input placeholder="请输入描述" />
+          </Form.Item>
+          {/* links */}
+        </Form>
+        <Button
+          className={styles.createBtn}
+          type='primary'
+          onClick={() => handleSumbit()}
+          loading={loading}
+        >
+          创建
         </Button>
       </div>
-
-      <article key={displayMode} contentEditable ref={articleRef}>
-        {articleContent}
-      </article>
-
-      <MaterialSelector
-        visible={visibleOfTemplateModal}
-        onSelect={(ctx) => {
-          setVisibleOfTemplateModal(false);
-          handleSelect(ctx);
-        }}
-        onCancel={() => setVisibleOfTemplateModal(false)}
-      />
-
-      <footer>
-        <div className={styles.left}>
-          <span style={{ paddingRight: "10px" }}>归属学库:</span>
-          <Select
-            defaultValue={selectedStudyRouteId}
-            style={{ width: 120 }}
-            placeholder="请选择"
-            onChange={setSelectedStudyRouteId}
-          >
-            {studyRouteList.map((studyRoute) => (
-              <Select.Option key={studyRoute.id} value={studyRoute.id}>
-                {studyRoute.name}
-              </Select.Option>
-            ))}
-          </Select>
-          <span style={{ marginLeft: "20px", paddingRight: "10px" }}>
-            标题:
-          </span>
-          <Input
-            style={{ display: "inline-block", width: 120 }}
-            placeholder="请填写标题"
-            value={title}
-            onInput={(e) => setTitle(e.currentTarget.value)}
-          />
-        </div>
-        <div className={styles.right}>
-          {displayMode === DisplayMode.preview ? (
-            <Button
-              className={styles.footerBtn}
-              type="link"
-              onClick={() => setDisplayMode(DisplayMode.editing)}
-            >
-              取消预览
-            </Button>
-          ) : (
-            <Button
-              className={styles.footerBtn}
-              type="link"
-              onClick={() => setDisplayMode(DisplayMode.preview)}
-            >
-              &nbsp;预览&nbsp;
-            </Button>
-          )}
-          <Button className={styles.footerBtn} onClick={handleSumbit}>
-            提交
-          </Button>
-        </div>
-      </footer>
     </div>
   );
 };

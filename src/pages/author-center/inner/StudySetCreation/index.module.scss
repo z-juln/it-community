@@ -1,21 +1,25 @@
 .StudySetCreation {
-  padding: 20px;
-  .editLine {
-    padding: 4px;
-    border-bottom: 1px solid var(--primary_color);
-  }
-  & > article {
-    min-height: calc(100vh - 240px);
-    margin-top: 10px;
-    padding: 10px;
-    background-color: var(--bg);
-  }
-  & > footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    .footerBtn {
-      margin-left: 10px;
+  height: calc( 100vh - 46px - 60px );
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .container {
+    position: relative;
+    top: -80px;
+    width: 300px;
+    padding: 30px;
+    background-color: var(--button_mask);
+    border-radius: 8px;
+    h1 {
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 20px;
     }
+  }
+  .createBtn {
+    display: block;
+    width: 100%;
+    margin: auto;
   }
 }
