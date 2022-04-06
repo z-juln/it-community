@@ -23,7 +23,10 @@ const User: React.FC<UserProps> = ({ className = "", style = {} }) => {
 
   const logout = () => {
     setUserInfo(null);
-    apis.logout();
+    localStorage.removeItem('token');
+    try {
+      apis.logout();
+    } catch {}
     navigate("/");
     window.location.reload();
   };

@@ -30,6 +30,16 @@ export const getStudyRoute = ({
   return request.get(url);
 };
 
+export const addStudyRoute = (params: {
+  name: string;
+  zone_id: number;
+  nodes: string;
+  detail?: string;
+  links?: string;
+  cover?: string;
+}): Promise<Response<StudyRoute | null>> =>
+  request.post('/api/study-route/add', params);
+
 export default {
   getStudyRouteList,
   getStudyRoute,

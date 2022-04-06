@@ -1,2 +1,33 @@
 .StudyRouteCreation {
+  .container {
+    padding: 30px;
+    border-radius: 8px;
+    h1 {
+      font-size: 20px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  }
+  .contenBox {
+    margin: 20px;
+    margin-bottom: 30px;
+    padding: 20px;
+    background-color: var(--bg);
+    padding: 20px;
+    border-radius: 20px;
+    box-shadow: 0px 0px 6px gray;
+    .StudyRouteLine {
+      display: flex;
+      flex-wrap: wrap;
+    }
+  }
+  .Form {
+    margin: auto;
+    width: 300px;
+  }
+  .createBtn {
+    margin: auto;
+    display: block;
+    width: 300px;
+  }
 }

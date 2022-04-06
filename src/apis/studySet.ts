@@ -3,7 +3,7 @@ import { request } from "@/utils";
 import type { StudyItem, StudySet } from "@/model";
 import type { Response } from "@/@types/global";
 
-export const getStudySetInfo = (id: string): Promise<Response<StudySet>> =>
+export const getStudySetInfo = (id: string | number): Promise<Response<StudySet>> =>
   request.get(`/api/study-set/info?id=${id}`);
 
 export const getStudySetList = ({
