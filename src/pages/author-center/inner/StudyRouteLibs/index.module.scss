@@ -1,2 +1,18 @@
 .StudyRouteLibs {
+  padding: 20px;
+  padding-right: 0;
+  h2 {
+    padding-bottom: 10px;
+    .createLink {
+      
+    }
+  }
+  .list {
+    display: flex;
+    flex-wrap: wrap;
+    .StudyRouteCard {
+      margin-right: 20px;
+      margin-bottom: 20px;
+    }
+  }
 }

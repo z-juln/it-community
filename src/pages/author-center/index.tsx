@@ -54,7 +54,7 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
   const mainElement = (() => {
     switch (tab) {
       case TabKey.studyRouteLibs:
-        return <StudyRouteLibs />;
+        return <StudyRouteLibs setTab={setTab} />;
       case TabKey.studySetLibs:
         return <StudySetLibs setTab={setTab} />;
       case TabKey.studyRouteCreation:
@@ -73,7 +73,7 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
         selectedKeys={[tab]}
         mode="horizontal"
       >
-        <Menu.SubMenu key="libs" title="资源">
+        <Menu.SubMenu key="libs" title="我的资源">
           <Menu.Item key="studyRouteLibs">学习路线</Menu.Item>
           <Menu.Item key="studySetLibs">学库</Menu.Item>
         </Menu.SubMenu>

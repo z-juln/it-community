@@ -3,10 +3,8 @@ import { Select, Input, Empty } from "antd";
 import { useZoneList } from "@/store";
 import * as apis from "@/apis";
 import {
-  DislikeOutlined,
   DownOutlined,
   FireOutlined,
-  LikeOutlined,
   SearchOutlined,
   UpOutlined,
 } from "@ant-design/icons";

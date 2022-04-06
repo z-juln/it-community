@@ -9,6 +9,7 @@ import { Empty } from "antd";
 import CommonCard from "@/components/Card/CommonCard";
 import { ArrowRightOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
+import StudyRouteLine from "@/components/StudyRouteLine";
 
 export interface StudyRouteProps {}
 
@@ -28,23 +29,10 @@ const StudyRouteComp: React.FC<StudyRouteProps> = () => {
         title={`[学习路线]: ${studyRoute?.name || ""}`}
         commendTree={[]}
       >
-        {studyRoute?.nodes.length ? (
-          <ul className={articleStyles.cardList}>
-            <li className={styles.start}>起点</li>
-            {studyRoute.nodes.map((item, index) => (
-              <>
-                {index === 0 && <ArrowRightOutlined className={styles.arrow} />}
-                <Link to={`/study-set/${item.id}`}>
-                  <CommonCard className={styles.card} data={item} />
-                </Link>
-                <ArrowRightOutlined className={styles.arrow} />
-              </>
-            ))}
-            <li className={styles.end}>终点</li>
-          </ul>
-        ) : (
-          <Empty style={{ transform: "translateY(100px)" }} />
-        )}
+        {studyRoute?.nodes.length ?
+          <StudyRouteLine className={articleStyles.cardList} data={studyRoute} />
+          : <Empty style={{ transform: "translateY(100px)" }} />
+        }
       </ArticlePage>
     </div>
   );
