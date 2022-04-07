@@ -43,10 +43,11 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
   useEffect(() => {
     if (applyStatus === 'pass') return;
     if (!info || !applyStatus) return;
-    console.log({ info, userInfo, applyStatus });
+    // console.log({ info, userInfo, applyStatus });
     const isPrivatelyVisible = userInfo && info.uid === userInfo.uid && applyStatus === 'waitting'; // 自己可见
-    if (!isPrivatelyVisible) {
-      message.error('当前学点正在审核中，除作者外用户皆无权访问');
+    const isAdmin = location.search.includes('role=admin');
+    if (!isPrivatelyVisible && !isAdmin) {
+      message.error('当前学点正在审核中，除作者和管理员外用户皆无权访问');
       navigate('/404');
     }
   }, [info, applyStatus]);
