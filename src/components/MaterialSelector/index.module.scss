@@ -1,15 +1,27 @@
 .MaterialSelector {
+  width: 960px !important;
   .selectBox {
-    & > ul > li {
-      margin-bottom: 20px;
-      padding: 20px;
-      border: 1px solid lightgray;
-      opacity: 0.7;
-      &.actived {
-        border-color: var(--primary_color);
-        opacity: 1;
+    & > ul {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      & > li {
+        margin-bottom: 20px;
+        padding: 20px;
+        width: 440px;
+        border: 1px solid lightgray;
+        opacity: 0.7;
+        box-sizing: border-box;
+        &.actived {
+          border-color: var(--primary_color);
+          opacity: 1;
+        }
       }
     }
+  }
+  .tip {
+    font-size: 14px;
+    opacity: 0.8;
   }
   .ensureBtn {
     display: block;

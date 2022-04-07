@@ -2,11 +2,11 @@ import React, { memo, useState } from "react";
 import styles from "./index.module.scss";
 import type { CommonProps } from "@/@types/global";
 import { MaterialBaseCtx, MaterialType } from "../Material/model";
-import { Button, Modal } from "antd";
+import { Button, Modal, ModalProps } from "antd";
 import { MaterialMap, templateMap } from "../Material/materialMap";
 import Material from "../Material";
 
-export interface MaterialSelectorProps extends CommonProps {
+export interface MaterialSelectorProps extends CommonProps, ModalProps {
   visible?: boolean;
   onSelect?: (ctx: MaterialBaseCtx) => void;
   onCancel?: () => void;
@@ -18,6 +18,7 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
   visible = false,
   onSelect,
   onCancel,
+  ...props
 }) => {
   const [selectedCtx, setSelectedCtx] = useState<MaterialBaseCtx | null>(null);
   const selectedTemplateType = selectedCtx?.type ?? null;
@@ -29,6 +30,8 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
       title="选用模板"
       visible={visible}
       footer={null}
+      onCancel={onCancel}
+      {...props}
     >
       <div className={styles.selectBox}>
         <ul>
@@ -61,6 +64,7 @@ const MaterialSelector: React.FC<MaterialSelectorProps> = ({
           ))}
         </ul>
       </div>
+      <div className={styles.tip}>即将推出其它模板，敬请期待</div>
       <Button
         className={styles.ensureBtn}
         onClick={() => {
