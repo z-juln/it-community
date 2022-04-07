@@ -1,7 +1,7 @@
 import React, { memo, useMemo, useRef, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { popupLoginPanelState, userInfoState } from "@/store";
-import { Avatar, Input } from "antd";
+import { Avatar, Input, message } from "antd";
 import {
   CommentOutlined,
   LikeOutlined,
@@ -46,10 +46,22 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
         <div className={`${styles.likeBtn} ${styles.panelBtn}`}>
           <LikeOutlined />
         </div>
-        <div className={`${styles.commentBtn} ${styles.panelBtn}`}>
+        <div
+          className={`${styles.commentBtn} ${styles.panelBtn}`}
+          onClick={() => {
+            const commentSectionHead = document.querySelector('#commentSectionHead');
+            if (!commentSectionHead) {
+              throw new Error('commentSectionHead不存在');
+            }
+            commentSectionHead.scrollIntoView();
+          }}
+        >
           <CommentOutlined />
         </div>
-        <div className={`${styles.collectBtn} ${styles.panelBtn}`}>
+        <div
+          className={`${styles.collectBtn} ${styles.panelBtn}`}
+          onClick={() => message.info('功能尚未开放')}
+        >
           <StarOutlined />
         </div>
       </div>
@@ -102,7 +114,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
           </div>
 
           <>
-            <h2>全部评论 {commendCount}</h2>
+            <h2 id="commentSectionHead">全部评论 {commendCount}</h2>
 
             <ul className={styles.commendTree}>
               <CommendTree
