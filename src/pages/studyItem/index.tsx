@@ -1,31 +1,58 @@
-import * as apis from "@/apis";
+import * as apis from "@/apis/studyItem";
+import * as discussApis from "@/apis/discuss";
 import { Empty, message } from "antd";
-import React, { memo, useEffect, useMemo, useState } from "react";
-import { useParams } from "react-router";
+import React, { memo, useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router";
 import ArticlePage from "@/components/ArticlePage";
 import styles from "./index.module.scss";
-import type { DiscussWithChildren, StudyItem } from "@/model";
+import type { Apply, DiscussWithChildren, StudyItem } from "@/model";
 import Material from "@/components/Material";
+import { useRecoilValue } from "recoil";
+import { userInfoState } from "@/store";
 
 export interface StudyItemProps {}
 
 const StudyItemComp: React.FC<StudyItemProps> = () => {
+  const navigate = useNavigate();
   const id = useParams().id!;
+  const userInfo = useRecoilValue(userInfoState);
   const [info, setInfo] = useState<StudyItem | null>(null);
   const contentNodes = JSON.parse(info?.content || "[]") ?? [];
   const [commendTreeData, setCommendTreeData] = useState<DiscussWithChildren[]>(
     []
   );
+  const [applyStatus, setApplyStatus] = useState<Apply['status'] | null>(null);
 
   useEffect(() => {
-    apis.getStudyItemInfo(id).then((res) => {
-      setInfo(res.data);
+    apis.getStudyItemInfo(id).then(({ data }) => {
+      if (data === null) {
+        message.error('该学点不存在');
+        navigate('/404');
+      } else {
+        setInfo(data);
+      }
     });
+    apis.getApplyList({ target_id: +id })
+      .then(({ data }) => {
+        setApplyStatus(data[0].status);
+      });
     refetchDiscussList();
   }, [id]);
 
+  // 如果文章处于审核中，且当前登陆用户不是文章的作者，则跳转404
+  useEffect(() => {
+    if (applyStatus === 'pass') return;
+    if (!info || !applyStatus) return;
+    console.log({ info, userInfo, applyStatus });
+    const isPrivatelyVisible = userInfo && info.uid === userInfo.uid && applyStatus === 'waitting'; // 自己可见
+    if (!isPrivatelyVisible) {
+      message.error('当前学点正在审核中，除作者外用户皆无权访问');
+      navigate('/404');
+    }
+  }, [info, applyStatus]);
+
   function refetchDiscussList() {
-    apis.getDiscussList({ super_id: +id, super_type: "item" }).then((res) => {
+    discussApis.getDiscussList({ super_id: +id, super_type: "item" }).then((res) => {
       setCommendTreeData(res.data);
     });
   }
@@ -45,10 +72,17 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
   return (
     <div className={styles.StudyItem}>
       <ArticlePage
-        title={`[学点]: ${info?.title || ""}`}
+        title={(
+          <>
+            <span>[学点]: {info?.title || ""}</span>
+            {applyStatus === 'waitting' &&
+              <span className={styles.applyingBox}>审核中...</span>
+            }
+          </>
+        )}
         commendTree={commendTreeData}
         onReply={async (content, topId) => {
-          const { data: resultDiscuss } = await apis.addDiscuss({
+          const { data: resultDiscuss } = await discussApis.addDiscuss({
             topId,
             content,
             super_id: +id,

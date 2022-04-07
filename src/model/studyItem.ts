@@ -1,6 +1,7 @@
 import type { DBStudySet } from ".";
 
 export interface DBStudyItem {
+  uid: number;
   id: number;
   set_id: number;
   title: string;
@@ -11,6 +12,7 @@ export interface DBStudyItem {
 }
 
 export interface StudyItem {
+  uid: number;
   id: number;
   set: DBStudySet;
   title: string;

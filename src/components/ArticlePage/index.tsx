@@ -10,11 +10,11 @@ import {
 } from "@ant-design/icons";
 import styles from "./index.module.scss";
 import type { CommonProps } from "@/@types/global";
-import { Discuss, DiscussWithChildren, SavedUserResult } from "@/model";
+import { ApplyStatus, Discuss, DiscussWithChildren, SavedUserResult } from "@/model";
 import CommendTree from "../CommendTree";
 
 export interface ArticlePageProps extends CommonProps {
-  title: string;
+  title: React.ReactNode;
   commendTree: DiscussWithChildren[];
   onReply?: (content: string, topId: number) => Promise<Discuss | null>;
 }
