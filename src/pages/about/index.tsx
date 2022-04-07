@@ -11,7 +11,7 @@ const About: React.FC<AboutProps> = () => {
         该项目是社区维护, 我们的核心成员有: &nbsp;&nbsp;<a href="https://github.com/z-juln">juln</a>、xxx、xxx...
         <br />
         <br />
-        gitee地址: https://gitee.com/juln/it-community
+        gitee地址: <a href="https://gitee.com/juln/it-community">https://gitee.com/juln/it-community</a>
         <br />
         <br />
         欢迎加入我们

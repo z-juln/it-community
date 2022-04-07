@@ -27,9 +27,14 @@ const MainLayout: React.FC<MainLayoutProps> = ({
       <div className={styles.MainLayout}>
         {/* tabBar */}
         <section className={styles.tabBar}>
-          <div className={styles.logo}>
+          {/* <div className={styles.oldLogo}>
             <a href="/">
               <p>it community</p>
+            </a>
+          </div> */}
+          <div className={styles.logo}>
+            <a href="/">
+              <img src="/logo.png" alt="" />
             </a>
           </div>
           <MenuList className={styles.topMenuList} list={topMenuList} />
