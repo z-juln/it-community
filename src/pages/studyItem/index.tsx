@@ -17,6 +17,7 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
   const id = useParams().id!;
   const userInfo = useRecoilValue(userInfoState);
   const [info, setInfo] = useState<StudyItem | null>(null);
+  console.log('content: ', info?.content)
   const contentNodes = JSON.parse(info?.content || "[]") ?? [];
   const [commendTreeData, setCommendTreeData] = useState<DiscussWithChildren[]>(
     []

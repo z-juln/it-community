@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useRef, useState } from "react";
+import React, { memo, useEffect, useMemo, useRef, useState } from "react";
 import styles from "./index.module.scss";
 import { Button, Input, notification, Select } from "antd";
-import { useRecoilState } from "recoil";
+import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store";
 import Material from "@/components/Material";
 import * as apis from "@/apis";
@@ -13,12 +13,34 @@ import { useNavigate } from "react-router";
 
 export interface StudyItemCreationProps extends CommonProps {}
 
+enum DisplayMode {
+  editing = "editing",
+  preview = "preview",
+}
+type ArticleNode = {
+  key?: any;
+  $$typeof: string;
+  content: string | MaterialBaseCtx;
+};
+const createHostArticleNode = (innerHtml: string) => ({
+  $$typeof: "HOST",
+  content: innerHtml.replace(/"/g, '\\"').replace(/'/g, '\\"'),
+});
+const initRow: ArticleNode = {
+  $$typeof: "HOST",
+  content: "写点什么吧...",
+};
+const br: ArticleNode = {
+  $$typeof: "HOST",
+  content: "<br />",
+};
+
 const StudyItemCreation: React.FC<StudyItemCreationProps> = ({
   className = "",
   style = {},
 }) => {
   const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const userInfo = useRecoilValue(userInfoState);
   const [visibleOfTemplateModal, setVisibleOfTemplateModal] = useState(false);
 
   if (!userInfo) {
@@ -31,10 +53,6 @@ const StudyItemCreation: React.FC<StudyItemCreationProps> = ({
     number | null
   >(null);
   const articleRef = useRef<HTMLElement>(null);
-  enum DisplayMode {
-    editing = "editing",
-    preview = "preview",
-  }
   const [displayMode, setDisplayMode] = useState(DisplayMode.editing);
 
   useEffect(() => {
@@ -47,40 +65,35 @@ const StudyItemCreation: React.FC<StudyItemCreationProps> = ({
       });
   }, [userInfo]);
 
-  type ArticleNode = {
-    key?: any;
-    $$typeof: string;
-    content: string | MaterialBaseCtx;
-  };
-  const createHostArticleNode = (innerHtml: string) => ({
-    $$typeof: "HOST",
-    content: innerHtml,
-  });
-  const initRow: ArticleNode = {
-    $$typeof: "HOST",
-    content: "写点什么吧...",
-  };
-  const br: ArticleNode = {
-    $$typeof: "HOST",
-    content: "<br />",
-  };
   const [tempContentNodes, setTempContentNodes] = useState<ArticleNode[]>([
     initRow,
   ]);
-  const articleContent = tempContentNodes.map((node) => {
-    if (node.$$typeof === "HOST" && typeof node.content === "string") {
-      return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
-    } else if (typeof node.content !== "string") {
-      return (
-        <div contentEditable={false} data-material-key={node.key ?? false}>
-          <Material
-            initCtx={node.content}
-            showTemplateCtxBox={displayMode === DisplayMode.editing}
-          />
-        </div>
-      );
-    }
-  });
+  const finnalyTempContentNodes = useRef<ArticleNode[]>(tempContentNodes);
+
+  useEffect(() => {
+    finnalyTempContentNodes.current = tempContentNodes;
+  }, [tempContentNodes]);
+  
+  const articleContent = useMemo(() => {
+    return tempContentNodes.map((node, index) => {
+      if (node.$$typeof === "HOST" && typeof node.content === "string") {
+        return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
+      } else if (typeof node.content !== "string") {
+        return (
+          <div contentEditable={false} data-material-key={node.key ?? false}>
+            <Material
+              initCtx={node.content}
+              showTemplateCtxBox={displayMode === DisplayMode.editing}
+              onChange={(newCtx) => {
+                const targetNode = finnalyTempContentNodes.current[index];
+                targetNode.content = JSON.stringify(newCtx, null, 2);
+              }}
+            />
+          </div>
+        );
+      }
+    })
+  }, [tempContentNodes, setTempContentNodes, displayMode]);
 
   const handleSelect = (ctx: MaterialBaseCtx) => {
     setTempContentNodes((content) => [
@@ -139,25 +152,26 @@ const StudyItemCreation: React.FC<StudyItemCreationProps> = ({
     const data = getSubmitData();
     const dataStr = JSON.stringify(data);
     console.log({ submitData: data });
-    apis
-      .postArticle({
-        setId: selectedStudyRouteId,
-        content: dataStr,
-        // TODO detail
-        detail: "",
-        title,
-      })
-      .then(({ data }) => {
-        if (!data) {
-          notification.error({
-            message: "文章发布失败",
-            description: "原因未知",
-            duration: 3,
-          });
-          return;
-        }
-        navigate(`/published?title=${title}&id=${data.articleId}`);
-      });
+    return;
+    // apis
+    //   .postArticle({
+    //     setId: selectedStudyRouteId,
+    //     content: dataStr,
+    //     // TODO detail
+    //     detail: "",
+    //     title,
+    //   })
+    //   .then(({ data }) => {
+    //     if (!data) {
+    //       notification.error({
+    //         message: "文章发布失败",
+    //         description: "原因未知",
+    //         duration: 3,
+    //       });
+    //       return;
+    //     }
+    //     navigate(`/published?title=${title}&id=${data.articleId}`);
+    //   });
   };
 
   return (
@@ -171,7 +185,7 @@ const StudyItemCreation: React.FC<StudyItemCreationProps> = ({
         </Button>
       </div>
 
-      <article key={displayMode} contentEditable ref={articleRef}>
+      <article contentEditable ref={articleRef}>
         {articleContent}
       </article>
 

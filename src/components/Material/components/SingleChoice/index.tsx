@@ -1,4 +1,4 @@
-import React, { memo, useMemo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import styles from "./index.module.scss";
 import { MaterialBaseProps, MaterialType } from "../../model";
 import type { Ctx } from "./model";
@@ -30,7 +30,7 @@ export const SingleChoice: React.FC<SingleChoiceProps> = ({
   const [showTemplateCtx, setShowTemplateCtx] = useState(false);
   const [error, setError] = useState<any>(null);
   const [configValue, setConfigValue] = useState(
-    JSON.stringify(ctxTemplate, null, 2)
+    JSON.stringify(initCtx, null, 2)
   );
   const ctx = useMemo(() => {
     try {
