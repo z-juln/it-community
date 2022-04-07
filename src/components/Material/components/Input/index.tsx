@@ -2,20 +2,20 @@ import React, { memo, useMemo, useState } from "react";
 import styles from "./index.module.scss";
 import { MaterialBaseProps, MaterialType } from "../../model";
 import type { Ctx } from "./model";
-import { Button, Input } from "antd";
+import { Button, Input as AntdInput } from "antd";
 
-export interface ConfirmProps extends MaterialBaseProps<Ctx> {
+export interface InputProps extends MaterialBaseProps<Ctx> {
   initCtx?: Ctx;
 }
 
 export const ctxTemplate: Ctx = {
-  type: MaterialType.CONFIRM,
-  title: "判断题xxx",
-  content: "1 + 1 = 2",
-  answer: true,
+  type: MaterialType.INPUT,
+  title: "问答题xxx",
+  content: "1 + 1 = ?",
+  answer: "2",
 };
 
-export const Confirm: React.FC<ConfirmProps> = ({
+export const Input: React.FC<InputProps> = ({
   className = "",
   style = {},
   showTemplateCtxBox = false,
@@ -39,7 +39,7 @@ export const Confirm: React.FC<ConfirmProps> = ({
   }, [configValue]);
 
   return (
-    <div className={`${className} ${styles.Confirm}`} style={style}>
+    <div className={`${className} ${styles.Input}`} style={style}>
       {!error && ctx ? (
         <article>
           <p className="title">{ctx.title}</p>
@@ -53,7 +53,7 @@ export const Confirm: React.FC<ConfirmProps> = ({
         <div className={styles.answerBox}>
           <hr />
           {showAnswer ? (
-            <div>答案: {ctx?.answer ? '对' : '错'}</div>
+            <div>答案: {ctx?.answer}</div>
           ) : (
             <Button onClick={() => setShowAnswer(true)}>查看答案</Button>
           )}
@@ -67,7 +67,7 @@ export const Confirm: React.FC<ConfirmProps> = ({
             {showTemplateCtx && (
               <>
                 <p>配置参数:</p>
-                <Input.TextArea
+                <AntdInput.TextArea
                   value={configValue}
                   autoSize
                   onChange={(e) => {
@@ -85,4 +85,4 @@ export const Confirm: React.FC<ConfirmProps> = ({
   );
 };
 
-export default memo(Confirm);
+export default memo(Input);

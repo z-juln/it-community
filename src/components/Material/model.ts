@@ -4,6 +4,7 @@ export enum MaterialType {
   SINGLE_CHOICE = "single-choice",
   MULT_CHOICE = "mult-choice",
   CONFIRM = "confirm",
+  INPUT = "input",
 }
 
 export interface MaterialBaseCtx {

@@ -18,7 +18,7 @@ const Material: React.FC<MaterialProps> = ({
 
   return (
     <div className={`${className} ${styles.Material}`} style={style}>
-      <Node {...materialProps} />
+      <Node {...materialProps as any} />
     </div>
   );
 };
