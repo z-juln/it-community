@@ -1,6 +1,6 @@
 import React, { memo, useState } from "react";
 import { useRecoilState } from "recoil";
-import { Badge, Button, Space } from "antd";
+import { Badge, Button, message, Space } from "antd";
 import UserAvatar from "@/components/UserAvatar";
 import { LogoutOutlined } from "@ant-design/icons";
 import { popupLoginPanelState, userInfoState } from "@/store";
@@ -29,6 +29,7 @@ const User: React.FC<UserProps> = ({ className = "", style = {} }) => {
     } catch {}
     navigate("/");
     window.location.reload();
+    message.success('登出成功');
   };
 
   return (
@@ -42,10 +43,12 @@ const User: React.FC<UserProps> = ({ className = "", style = {} }) => {
         <DropdownMenuList
           list={tabConfig.userDropDown}
           footer={
-            <Space onClick={logout}>
-              <LogoutOutlined />
-              登出
-            </Space>
+            <div onClick={logout}>
+              <Space>
+                <LogoutOutlined />
+                登出
+              </Space>
+            </div>
           }
         >
           <Badge count={0}>

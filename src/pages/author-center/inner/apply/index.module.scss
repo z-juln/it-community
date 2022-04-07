@@ -1,2 +1,21 @@
-.Demo {
+.Apply {
+  padding: 60px 20px;
+  article {
+    h2 {
+      text-align: center;
+    }
+    pre {
+      margin: 20px 0;
+      padding: 20px;
+      min-height: calc(100vh - 260px);
+      background-color: var(--bg);
+      border-radius: 10px;
+      box-shadow: 0 0 4px lightgray;
+      font-size: 18px;
+    }
+  }
+  .applyBtn {
+    margin: auto;
+    display: block;
+  }
 }

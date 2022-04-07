@@ -1,6 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import styles from "./index.module.scss";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import { useRecoilValue } from "recoil";
 import { userInfoState } from "@/store";
 import * as apis from '@/apis/studySet';
@@ -29,6 +29,7 @@ const StudySetLibs: React.FC<StudySetCreationProps> = ({
 }) => {
   const navigate = useNavigate();
   const [studySetList, setStudySetList] = useState<StudySet[]>([]);
+  const isEmpty = studySetList.length === 0;
 
   const userInfo = useRecoilValue(userInfoState);
   if (!userInfo) {
@@ -54,11 +55,15 @@ const StudySetLibs: React.FC<StudySetCreationProps> = ({
           点我创建更多学库
         </Button>
       </h2>
-      <ul className={styles.list}>
-        {studySetList.map(info => (
-          <StudySetCard className={styles.StudySetCard} data={info} />
-        ))}
-      </ul>
+      {isEmpty ?
+        <Empty description="暂无数据" />
+        : (
+        <ul className={styles.list}>
+          {studySetList.map(info => (
+            <StudySetCard className={styles.StudySetCard} data={info} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

@@ -1,2 +1,16 @@
 .About {
+  padding: 20px;
+  h2 {
+    text-align: center;
+  }
+  article {
+    margin-top: 20px;
+    padding: 20px;
+    background-color: var(--bg);
+    box-shadow: 0 0 4px lightgray;
+    border-radius: 10px;
+    a {
+      text-decoration: underline;
+    }
+  }
 }

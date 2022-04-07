@@ -1,7 +1,7 @@
-import React, { memo, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Button, Menu } from "antd";
-import { User, UserRole } from "@/model";
+import { Apply as ApplyType, User, UserRole } from "@/model";
 import Apply from "./inner/apply";
 import { userInfoState } from "@/store";
 import styles from "./index.module.scss";
@@ -10,6 +10,7 @@ import StudyItemCreation from "./inner/StudyItemCreation";
 import StudySetLibs from "./inner/StudySetLibs";
 import StudyRouteLibs from "./inner/StudyRouteLibs";
 import StudyRouteCreation from "./inner/StudyRouteCreation";
+import * as apis from '@/apis/provider';
 
 function checkAuth(role: User["role"]) {
   return [UserRole.ADMIN, UserRole.PROVIDER].includes(role);
@@ -29,23 +30,57 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
   const [showApplyPage, setShowApplyPage] = useState(false);
   const [tab, setTab] = useState(TabKey.studyRouteLibs);
   const userInfo = useRecoilValue(userInfoState);
+  const [applyStatus, setApplyStatus] = useState<ApplyType['status'] | null>(null);
 
-  if (showApplyPage) {
-    return <Apply key="apply" onApply={() => setShowApplyPage(false)} />;
-  }
 
   if (!userInfo) {
     throw new Error("用户信息获取不到");
   }
-  const hasAuth = checkAuth(userInfo.role);
+
+  const hasAuth = useMemo(() => {
+    // 申请通过后，如果不重新登陆, userInfo.role不会更新，只能通过applyStatus判断
+    return checkAuth(userInfo.role) || applyStatus === 'pass';
+  }, [userInfo, applyStatus]);
+
+  useEffect(() => {
+    apis.getApplyStatus()
+      .then(({ data, code }) => {
+        if (code !== 1 || !data) {
+          // throw new Error('获取申请状态失败');
+          return;
+        }
+        setApplyStatus(data.status);
+      })
+      .catch(() => {
+        // message.error('获取申请状态失败');
+      });
+  }, []);
+
+  if (showApplyPage) {
+    return (
+      <Apply
+        onApply={() => {
+          setShowApplyPage(false);
+          window.location.reload();
+        }}
+      />
+    );
+  }
+
   if (!hasAuth) {
     return (
       <section className={styles.apply}>
         <h2>
-          你还不是贡献者
-          <Button type="link" onClick={() => setShowApplyPage(true)}>
-            点我申请成为贡献者
-          </Button>
+          {applyStatus === 'waitting' ? (
+            '审核中... 等待管理员通过'
+          ) : (
+            <>
+              你还不是贡献者
+              <Button type="link" onClick={() => setShowApplyPage(true)}>
+                点我申请成为贡献者
+              </Button>
+            </>
+          )}
         </h2>
       </section>
     );

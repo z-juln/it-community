@@ -1,6 +1,9 @@
 import { request } from "@/utils";
-import type { User } from "@/model";
+import type { Apply, User } from "@/model";
 import type { Response } from "@/@types/global";
+
+export const getApplyStatus = (): Promise<Response<Apply | null>> =>
+  request.get('/api/provider/apply-info');
 
 export const applyProvider = (uid: number): Promise<Response<User | null>> =>
   request.post("/api/provider/apply", { uid });

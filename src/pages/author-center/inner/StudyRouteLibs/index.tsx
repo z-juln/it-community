@@ -7,7 +7,7 @@ import type { CommonProps } from "@/@types/global";
 import { StudyRoute } from "@/model";
 import { useNavigate } from "react-router";
 import StudyRouteCard from "@/components/Card/StudyRouteCard";
-import { Button } from "antd";
+import { Button, Empty } from "antd";
 import { TabKey } from "../..";
 
 export interface FormField {
@@ -29,6 +29,7 @@ const StudyRouteLibs: React.FC<StudyRouteLibsProps> = ({
 }) => {
   const navigate = useNavigate();
   const [studyRouteList, setStudyRouteList] = useState<StudyRoute[]>([]);
+  const isEmpty = studyRouteList.length === 0;
 
   const userInfo = useRecoilValue(userInfoState);
   if (!userInfo) {
@@ -54,11 +55,15 @@ const StudyRouteLibs: React.FC<StudyRouteLibsProps> = ({
           点我创建更多学习路线
         </Button>
       </h2>
-      <ul className={styles.list}>
-        {studyRouteList.map(item => (
-          <StudyRouteCard className={styles.StudyRouteCard} data={item} />
-        ))}
-      </ul>
+      {isEmpty ?
+        <Empty description="暂无数据" />
+        : (
+        <ul className={styles.list}>
+          {studyRouteList.map(item => (
+            <StudyRouteCard className={styles.StudyRouteCard} data={item} />
+          ))}
+        </ul>
+      )}
     </div>
   );
 };

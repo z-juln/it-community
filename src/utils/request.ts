@@ -26,7 +26,7 @@ request.interceptors.response.use((resp: AxiosResponse<Response>) => {
   }
 
   if (resp.data.code !== 1) {
-    message.warn(resp.data.message);
+    // message.warn(resp.data.message);
   }
 
   return resp.data;
