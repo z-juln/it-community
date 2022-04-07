@@ -42,9 +42,9 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
     return (
       <section className={styles.apply}>
         <h2>
-          你还不是题主
+          你还不是贡献者
           <Button type="link" onClick={() => setShowApplyPage(true)}>
-            点我申请成为题主
+            点我申请成为贡献者
           </Button>
         </h2>
       </section>

@@ -1,10 +1,11 @@
 import React, { memo, useEffect, useState } from "react";
-import { Select, Input, Empty } from "antd";
+import { Select, Input, Empty, Tooltip } from "antd";
 import { useZoneList } from "@/store";
 import * as apis from "@/apis";
 import {
   DownOutlined,
   FireOutlined,
+  QuestionCircleOutlined,
   SearchOutlined,
   UpOutlined,
 } from "@ant-design/icons";
@@ -74,8 +75,9 @@ export const Home: React.FC<HomeProps> = () => {
       </div>
 
       <h2 className={styles.title}>
-        <FireOutlined />
-        学习路线
+        <FireOutlined style={{ color: 'var(--primary_button)' }} />
+        &nbsp;&nbsp;学习路线&nbsp;&nbsp;
+        <Tooltip placement='top' title='由学库组合成的学习路线'><QuestionCircleOutlined style={{ fontSize: '16px', opacity: 0.6 }} /></Tooltip>
         {studyRouteList.length ? (
           <div className={styles.moreBtn}>
             <span
@@ -119,8 +121,9 @@ export const Home: React.FC<HomeProps> = () => {
       </section>
 
       <h2 className={styles.title}>
-        <FireOutlined />
-        学库
+        <FireOutlined style={{ color: 'var(--primary_button)' }} />
+        &nbsp;&nbsp;学库&nbsp;&nbsp;
+        <Tooltip placement='top' title='学点(即学习知识点)的集合'><QuestionCircleOutlined style={{ fontSize: '16px', opacity: 0.6 }} /></Tooltip>
         {studySetList.length ? (
           <div className={styles.moreBtn}>
             <span

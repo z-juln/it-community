@@ -19,7 +19,7 @@ const tabConfig: TabConfig = {
   userDropDown: [
     {
       path: "/author-center",
-      label: "题主中心",
+      label: "贡献者中心",
       icon: <FireOutlined />,
     },
     { path: "/contact", label: "联系我们", icon: <QuestionCircleOutlined /> },
