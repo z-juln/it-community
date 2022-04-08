@@ -25,7 +25,14 @@ type ArticleNode = {
 };
 const createHostArticleNode = (innerHtml: string) => ({
   $$typeof: "HOST",
-  content: innerHtml.replace(/"/g, '\\"').replace(/'/g, '\\"'),
+  content: innerHtml
+    .replace(/\\/g, '\\\\')
+    .replace(/"/g, '\\"')
+    .replace(/'/g, '\\"')
+    .replace(/\n/g, '\\n')
+    .replace(/\t/g, '\\t')
+    .replace(/\r/g, '\\r')
+    .replaceAll('\b', '\\b'),
 });
 const initRow: ArticleNode = {
   $$typeof: "HOST",
@@ -173,13 +180,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
 
     const data = getSubmitData();
     const dataStr = JSON.stringify(data);
-    console.log({ submitData: data, content: data[0]?.content, requestBody: {
-      setId: selectedStudySetId,
-      content: dataStr,
-      detail: "",
-      title,
-      articleId: (mode === 'edit' && editId) ? +editId : -1,
-    } });
+    console.log({ content: data[0]?.content });
     apis
       .postArticle({
         setId: selectedStudySetId,
