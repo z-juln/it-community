@@ -1,21 +1,5 @@
 .StudyItemCreation {
-  padding: 20px;
-  .editLine {
-    padding: 4px;
-    border-bottom: 1px solid var(--primary_color);
-  }
-  & > article {
-    min-height: calc(100vh - 240px);
-    margin-top: 10px;
-    padding: 10px;
-    background-color: var(--bg);
-  }
-  & > footer {
-    display: flex;
-    justify-content: space-between;
-    padding: 10px 0;
-    .footerBtn {
-      margin-left: 10px;
-    }
+  :global(.StudyItemEditor-editLine) {
+    top: 106px;
   }
 }

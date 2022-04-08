@@ -108,6 +108,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
                     setTargetReplyInfo(null);
                     e.currentTarget.blur();
                   }
+                  e.currentTarget.value = '';
                 }
               }}
             />

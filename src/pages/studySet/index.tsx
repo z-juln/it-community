@@ -37,7 +37,7 @@ const StudySetComp: React.FC<StudySetProps> = () => {
             ))}
           </ul>
         ) : (
-          <Empty style={{ transform: "translateY(100px)" }} />
+          <Empty style={{ transform: "translateY(100px)" }} description='暂无数据' />
         )}
       </ArticlePage>
     </div>

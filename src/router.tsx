@@ -12,6 +12,7 @@ import StudyRoute from "./pages/studyRoute";
 import StudySet from "./pages/studySet";
 import StudyItem from "./pages/studyItem";
 import Published from "./pages/published";
+import StudyItemEditor from "./pages/author-center/inner/StudyItemEditor";
 
 const routes: RouteObject[] = [
   { path: "/", element: <Home /> },
@@ -21,6 +22,7 @@ const routes: RouteObject[] = [
   { path: "/study-item/:id", element: <StudyItem /> },
   { path: "/ranking", element: <Ranking /> },
   { path: "/author-center", element: <AuthorCenter /> },
+  { path: "/study-item/edit/:id", element: <StudyItemEditor /> },
   { path: "/published", element: <Published /> },
   { path: "/contact", element: <Contact /> },
   { path: "/about", element: <About /> },

@@ -1,0 +1,29 @@
+.StudyItemEditor {
+  padding: 20px;
+  .editLine {
+    position: sticky;
+    top: 60px;
+    z-index: 100;
+    padding: 4px;
+    background-color: var(--bg_click);
+    border-bottom: 1px solid var(--primary_color);
+  }
+  & > article {
+    min-height: calc(100vh - 240px);
+    margin-top: 10px;
+    padding: 10px;
+    background-color: var(--bg);
+  }
+  & > footer {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    background-color: var(--bg_click);
+    display: flex;
+    justify-content: space-between;
+    padding: 10px 0;
+    .footerBtn {
+      margin-left: 10px;
+    }
+  }
+}

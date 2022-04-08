@@ -102,22 +102,24 @@ const AuthorCenter: React.FC<AuthorCenterProps> = () => {
   })();
 
   return (
-    <div className={styles.AuthorCenter} key="AuthorCenter">
-      <Menu
-        onClick={(e) => setTab(e.key as TabKey)}
-        selectedKeys={[tab]}
-        mode="horizontal"
-      >
-        <Menu.SubMenu key="libs" title="我的资源">
-          <Menu.Item key="studyRouteLibs">学习路线</Menu.Item>
-          <Menu.Item key="studySetLibs">学库</Menu.Item>
-        </Menu.SubMenu>
-        <Menu.SubMenu key="add" title="新建">
-          <Menu.Item key="studyRouteCreation">学习路线</Menu.Item>
-          <Menu.Item key="studySetCreation">学库</Menu.Item>
-          <Menu.Item key="studyItemCreation">学点</Menu.Item>
-        </Menu.SubMenu>
-      </Menu>
+    <div className={styles.AuthorCenter}>
+      <div className={styles.Menu}>
+        <Menu
+          onClick={(e) => setTab(e.key as TabKey)}
+          selectedKeys={[tab]}
+          mode="horizontal"
+        >
+          <Menu.SubMenu key="libs" title="我的资源">
+            <Menu.Item key="studyRouteLibs">学习路线</Menu.Item>
+            <Menu.Item key="studySetLibs">学库</Menu.Item>
+          </Menu.SubMenu>
+          <Menu.SubMenu key="add" title="新建">
+            <Menu.Item key="studyRouteCreation">学习路线</Menu.Item>
+            <Menu.Item key="studySetCreation">学库</Menu.Item>
+            <Menu.Item key="studyItemCreation">学点</Menu.Item>
+          </Menu.SubMenu>
+        </Menu>
+      </div>
 
       <div className={styles.main}>{mainElement}</div>
     </div>

@@ -10,4 +10,9 @@
 }
 
 .AuthorCenter {
+  .Menu {
+    position: sticky;
+    top: 60px;
+    z-index: 100;
+  }
 }

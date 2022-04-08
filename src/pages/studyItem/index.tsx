@@ -23,6 +23,7 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
     []
   );
   const [applyStatus, setApplyStatus] = useState<Apply['status'] | null>(null);
+  const isProvider = userInfo && info && userInfo.uid === info.uid;
 
   useEffect(() => {
     apis.getStudyItemInfo(id).then(({ data }) => {
@@ -45,7 +46,7 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
     if (applyStatus === 'pass') return;
     if (!info || !applyStatus) return;
     // console.log({ info, userInfo, applyStatus });
-    const isPrivatelyVisible = userInfo && info.uid === userInfo.uid && applyStatus === 'waitting'; // 自己可见
+    const isPrivatelyVisible = isProvider && applyStatus === 'waitting'; // 自己可见
     const isAdmin = location.search.includes('role=admin');
     if (!isPrivatelyVisible && !isAdmin) {
       message.error('当前学点正在审核中，除作者和管理员外用户皆无权访问');
@@ -77,9 +78,19 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
         title={(
           <>
             <span>[学点]: {info?.title || ""}</span>
-            {applyStatus === 'waitting' &&
-              <span className={styles.applyingBox}>审核中...</span>
-            }
+            <div className={styles.statusBox}>
+              {applyStatus === 'waitting' &&
+                <span className={styles.applyingBox}>审核中...</span>
+              }
+              {isProvider &&
+                <span
+                  className={styles.editBox}
+                  onClick={() => navigate(`/study-item/edit/${info.id}?role=provider`)}
+                >
+                  编辑
+                </span>
+              }
+            </div>
           </>
         )}
         commendTree={commendTreeData}
@@ -101,7 +112,7 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
         {info ? (
           <>{articleContent}</>
         ) : (
-          <Empty style={{ transform: "translateY(100px)" }} />
+          <Empty style={{ transform: "translateY(100px)" }} description='暂无数据' />
         )}
       </ArticlePage>
     </div>

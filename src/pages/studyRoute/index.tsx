@@ -31,7 +31,7 @@ const StudyRouteComp: React.FC<StudyRouteProps> = () => {
       >
         {studyRoute?.nodes.length ?
           <StudyRouteLine className={articleStyles.cardList} data={studyRoute} />
-          : <Empty style={{ transform: "translateY(100px)" }} />
+          : <Empty style={{ transform: "translateY(100px)" }} description='暂无数据' />
         }
       </ArticlePage>
     </div>
