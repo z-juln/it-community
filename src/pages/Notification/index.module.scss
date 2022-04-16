@@ -1,0 +1,11 @@
+.NotificationPage {
+  .Menu {
+    padding-left: calc( ( 100vw - 700px ) / 3 );
+  }
+  .body {
+    margin-left: calc( ( 100vw - 700px ) / 3 );
+    margin-top: 10px;
+    overflow: hidden;
+    width: 700px;
+  }
+}

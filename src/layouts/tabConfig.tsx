@@ -1,9 +1,10 @@
-import { FireOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { FireOutlined, NotificationOutlined, QuestionCircleOutlined } from "@ant-design/icons";
+import { Badge } from "antd";
 
 export interface MenuItem {
   path: string;
   label: string;
-  icon?: React.ReactChildren | JSX.Element;
+  icon?: React.ReactNode | ((...args: any[]) => React.ReactNode);
 }
 
 export interface TabConfig {
@@ -17,6 +18,11 @@ const tabConfig: TabConfig = {
     { path: "/ranking", label: "排行榜" },
   ],
   userDropDown: [
+    {
+      path: "/notification",
+      label: "消息通知",
+      icon: (badgeCount = 0) => <Badge count={badgeCount} size='small'><NotificationOutlined /></Badge>,
+    },
     {
       path: "/author-center",
       label: "贡献者中心",

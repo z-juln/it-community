@@ -4,6 +4,7 @@ import { BrowserRouter } from "react-router-dom";
 import MainLayout from "./layouts/MainLayout";
 import Home from "@/pages/home";
 import Ranking from "./pages/ranking";
+import Notification from "./pages/Notification";
 import AuthorCenter from "./pages/author-center";
 import Contact from "./pages/contact";
 import About from "./pages/about";
@@ -21,6 +22,7 @@ const routes: RouteObject[] = [
   { path: "/study-set/:id", element: <StudySet /> },
   { path: "/study-item/:id", element: <StudyItem /> },
   { path: "/ranking", element: <Ranking /> },
+  { path: "/notification", element: <Notification /> },
   { path: "/author-center", element: <AuthorCenter /> },
   { path: "/study-item/edit/:id", element: <StudyItemEditor /> },
   { path: "/published", element: <Published /> },

@@ -1,6 +1,8 @@
 import React, { memo } from "react";
 import { useLocation, Link } from "react-router-dom";
 import { Menu, Dropdown, Space } from "antd";
+import { notificationState } from "@/store";
+import { useRecoilValue } from "recoil";
 import styles from "./index.module.scss";
 import type { CommonProps } from "@/@types/global";
 import type { MenuItem } from "@/layouts/tabConfig";
@@ -18,6 +20,7 @@ const DropdownMenuList: React.FC<DropdownMenuListProps> = ({
   children,
 }) => {
   const { pathname } = useLocation();
+  const { unReadCount } = useRecoilValue(notificationState);
 
   const menuNode = (
     <Menu>
@@ -28,7 +31,7 @@ const DropdownMenuList: React.FC<DropdownMenuListProps> = ({
         >
           <Link to={menu.path}>
             <Space>
-              {menu.icon}
+              {menu.path === '/notification' ? (menu.icon as any)(unReadCount) : menu.icon}
               {menu.label}
             </Space>
           </Link>
