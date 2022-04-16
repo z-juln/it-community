@@ -31,7 +31,7 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
         const list = res.data.map(item => ({
           ...item,
           meta: JSON.parse((item.meta ?? '{}')),
-        }));
+        })).reverse();
         setNotificationList(list);
       })
       .catch((error) => {
