@@ -10,7 +10,7 @@ import {
 } from "@ant-design/icons";
 import styles from "./index.module.scss";
 import type { CommonProps } from "@/@types/global";
-import { ApplyStatus, Discuss, DiscussWithChildren, SavedUserResult } from "@/model";
+import { Discuss, DiscussWithChildren, SavedUserResult } from "@/model";
 import CommendTree from "../CommendTree";
 
 export interface ArticlePageProps extends CommonProps {
@@ -98,17 +98,17 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
                   : "输入评论（Enter换行，⌘ + Enter发送）"
               }
               onBlurCapture={() => setTargetReplyInfo(null)}
-              onKeyDownCapture={(e) => {
+              onKeyDownCapture={async (e) => {
+                const { currentTarget } = e;
                 if (e.metaKey && e.key === "Enter") {
-                  const resultDiscuss = onReply?.(
-                    e.currentTarget.value,
+                  const resultDiscuss = await onReply?.(
+                    currentTarget.value,
                     targetReplyInfo?.discussId ?? -1
                   );
                   if (resultDiscuss) {
                     setTargetReplyInfo(null);
-                    e.currentTarget.blur();
+                    currentTarget.blur();
                   }
-                  e.currentTarget.value = '';
                 }
               }}
             />

@@ -43,7 +43,7 @@ const Commend: React.FC<CommendProps> = ({
           <p className={styles.name}>{userInfo.name}</p>
           <time>{getPlainTime(create_time)}</time>
         </div>
-        <p className={styles.content}>{content}</p>
+        <pre className={styles.content}>{content}</pre>
         <div className={styles.actionBox}>
           <span className={styles.actionItem}>
             <LikeOutlined /> {praise_count}

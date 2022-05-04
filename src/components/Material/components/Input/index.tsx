@@ -26,7 +26,7 @@ export const Input: React.FC<InputProps> = ({
   const [showTemplateCtx, setShowTemplateCtx] = useState(false);
   const [error, setError] = useState<any>(null);
   const [configValue, setConfigValue] = useState(
-    JSON.stringify(ctxTemplate, null, 2)
+    JSON.stringify(initCtx, null, 2)
   );
   const ctx = useMemo(() => {
     try {

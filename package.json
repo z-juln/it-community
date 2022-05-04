@@ -52,6 +52,7 @@
   "devDependencies": {
     "@types/throttle-debounce": "^2.1.0",
     "@umijs/fabric": "^2.10.2",
+    "@welldone-software/why-did-you-render": "^7.0.1",
     "customize-cra": "^1.0.0",
     "eslint": "^8.10.0",
     "eslint-plugin-react": "^7.29.2",

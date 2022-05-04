@@ -23,16 +23,17 @@ type ArticleNode = {
   $$typeof: string;
   content: string | MaterialBaseCtx;
 };
-const createHostArticleNode = (innerHtml: string) => ({
+const parseStrInJSON = (str: string) => str
+  .replace(/\\/g, '\\\\')
+  .replace(/"/g, '\\"')
+  .replace(/'/g, '\\"')
+  .replace(/\n/g, '\\n')
+  .replace(/\t/g, '\\t')
+  .replace(/\r/g, '\\r')
+  .replaceAll('\b', '\\b');
+const createHostArticleNode = (innerHtml: string): ArticleNode => ({
   $$typeof: "HOST",
-  content: innerHtml
-    .replace(/\\/g, '\\\\')
-    .replace(/"/g, '\\"')
-    .replace(/'/g, '\\"')
-    .replace(/\n/g, '\\n')
-    .replace(/\t/g, '\\t')
-    .replace(/\r/g, '\\r')
-    .replaceAll('\b', '\\b'),
+  content: parseStrInJSON(innerHtml),
 });
 const initRow: ArticleNode = {
   $$typeof: "HOST",
@@ -115,7 +116,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
               showTemplateCtxBox={displayMode === DisplayMode.editing}
               onChange={(newCtx) => {
                 const targetNode = finnalyTempContentNodes.current[index];
-                targetNode.content = JSON.stringify(newCtx, null, 2);
+                targetNode.content = JSON.stringify((JSON.parse(newCtx as string)), null, 0);
               }}
             />
           </div>
@@ -159,8 +160,12 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
       .map((htmlStrOrKey) => {
         if (htmlStrOrKey.match(/--@material-key@--:.*?/)) {
           const key = htmlStrOrKey.split("--@material-key@--:")[1];
-          console.log({ key });
-          return tempContentNodes.find((tempNode) => tempNode.key === key);
+          console.log({ key, node: tempContentNodes.find((tempNode) => tempNode.key === key)! });
+          const node = tempContentNodes.find((tempNode) => tempNode.key === key)!;
+          return {
+            ...node,
+            content: parseStrInJSON(node.content as string),
+          };
         } else {
           return createHostArticleNode(htmlStrOrKey);
         }
@@ -180,7 +185,9 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
 
     const data = getSubmitData();
     const dataStr = JSON.stringify(data);
-    console.log({ content: data[0]?.content });
+    console.log({ content: data, dataStr });
+    (window as any).dataStr = dataStr;
+    (window as any).content = data;
     apis
       .postArticle({
         setId: selectedStudySetId,

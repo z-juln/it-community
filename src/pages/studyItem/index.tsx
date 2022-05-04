@@ -1,7 +1,7 @@
 import * as apis from "@/apis/studyItem";
 import * as discussApis from "@/apis/discuss";
 import { Empty, message } from "antd";
-import React, { memo, useEffect, useState } from "react";
+import React, { memo, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import ArticlePage from "@/components/ArticlePage";
 import styles from "./index.module.scss";
@@ -17,11 +17,16 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
   const id = useParams().id!;
   const userInfo = useRecoilValue(userInfoState);
   const [info, setInfo] = useState<StudyItem | null>(null);
-  console.log({content: info?.content})
-  const contentNodes = JSON.parse(info?.content || "[]") ?? [];
-  const [commendTreeData, setCommendTreeData] = useState<DiscussWithChildren[]>(
-    []
-  );
+  const [error, setError] = useState<any>(null);
+  const contentNodes = useMemo(() => {
+    try {
+      return JSON.parse(info?.content || "[]") ?? [];
+    } catch (error) {
+      setError(error);
+      return [];
+    }
+  }, [info?.content]);
+  const [commendTreeData, setCommendTreeData] = useState<DiscussWithChildren[]>([]);
   const [applyStatus, setApplyStatus] = useState<Apply['status'] | null>(null);
   const isProvider = userInfo && info && userInfo.uid === info.uid;
 
@@ -60,13 +65,13 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
     });
   }
 
-  const articleContent = contentNodes.map((node: any) => {
+  const articleContent: React.ReactNode = contentNodes.map((node: any) => {
     if (node.$$typeof === "HOST" && typeof node.content === "string") {
       return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
-    } else if (typeof node.content !== "string") {
+    } else {
       return (
         <div contentEditable={false} data-material-key={node.key ?? false}>
-          <Material initCtx={node.content} />
+          <Material initCtx={JSON.parse(node.content)} />
         </div>
       );
     }
@@ -110,7 +115,7 @@ const StudyItemComp: React.FC<StudyItemProps> = () => {
         }}
       >
         {info ? (
-          <>{articleContent}</>
+          <>{error ? `error: ${error}` : articleContent}</>
         ) : (
           <Empty style={{ transform: "translateY(100px)" }} description='暂无数据' />
         )}
