@@ -25,7 +25,7 @@ const UserModal: React.FC<UserModalProps> = ({
   visible,
   onCancel: handleCancel,
 }) => {
-  const [userInfo, setUserInfo] = useRecoilState(userInfoState);
+  const [, setUserInfo] = useRecoilState(userInfoState);
 
   const [form] = Form.useForm<Fileds>();
   const [tab, setTab] = useState(Tab.LOGIN);
@@ -73,7 +73,7 @@ const UserModal: React.FC<UserModalProps> = ({
             label="密码"
             rules={[{ required: true, message: "密码未填写" }, {}]}
           >
-            <Input />
+            <Input type='password' />
           </Form.Item>
           <Form.Item>
             <Space>

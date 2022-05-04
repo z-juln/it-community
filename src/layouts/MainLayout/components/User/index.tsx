@@ -1,9 +1,9 @@
 import React, { memo, useState } from "react";
-import { useRecoilState } from "recoil";
+import { useRecoilState, useRecoilValue } from "recoil";
 import { Badge, Button, message, Space } from "antd";
 import UserAvatar from "@/components/UserAvatar";
 import { LogoutOutlined } from "@ant-design/icons";
-import { popupLoginPanelState, userInfoState } from "@/store";
+import { notificationState, popupLoginPanelState, userInfoState } from "@/store";
 import DropdownMenuList from "../DropdownMenuList";
 import UserModal from "../UserModal";
 import tabConfig from "@/layouts/tabConfig";
@@ -20,6 +20,7 @@ const User: React.FC<UserProps> = ({ className = "", style = {} }) => {
   console.log("userInfo: ", userInfo);
 
   const [popup, setPopup] = useRecoilState(popupLoginPanelState);
+  const { unReadCount: notificationUnReadCount } = useRecoilValue(notificationState);
 
   const logout = () => {
     setUserInfo(null);
@@ -51,7 +52,7 @@ const User: React.FC<UserProps> = ({ className = "", style = {} }) => {
             </div>
           }
         >
-          <Badge count={0}>
+          <Badge count={notificationUnReadCount} size='small'>
             <UserAvatar />
           </Badge>
         </DropdownMenuList>

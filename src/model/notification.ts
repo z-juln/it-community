@@ -1,4 +1,4 @@
-export type NotificationType = 'provider_apply' | 'study_item_apply' | 'praise' | 'discuss';
+export type NotificationType = 'provider_apply' | 'study_item_apply' | 'praise' | 'top-discuss' | 'reply-discuss';
 
 export interface Notification {
   id: number;

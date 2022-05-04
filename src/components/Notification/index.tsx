@@ -1,4 +1,6 @@
 import React, { memo, useEffect, useRef, useState } from "react";
+import { useSetRecoilState } from "recoil";
+import { notificationState } from "@/store";
 import styles from "./index.module.scss";
 import type { CommonProps } from "@/@types/global";
 import Notification from "@/model/notification";
@@ -16,6 +18,7 @@ const NotificationComp: React.FC<NotificationProps> = ({
   data,
 }) => {
   const { id, type, time, meta = null, readed: initReaded } = data;
+  const setNotificationState = useSetRecoilState(notificationState);
   const [readed, setReaded] = useState(initReaded);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -28,6 +31,10 @@ const NotificationComp: React.FC<NotificationProps> = ({
             .then(res => {
               if (res.code === 1 && res.data) {
                 setReaded(1);
+                setNotificationState((state) => ({
+                  ...state,
+                  unReadCount: state.unReadCount - 1
+                }));
               }
             });
           clearTimeout(timer);
@@ -75,14 +82,21 @@ const NotificationComp: React.FC<NotificationProps> = ({
         </span>
       );
       break;
-    case 'discuss':
+    case 'top-discuss':
       content = (
         <span>
           你的学点
           &nbsp;
-          <Link to={`/study-item/${data.target_id}`}></Link>
+          <Link to={`/study-item/${data.target_id}`}>{meta.title}</Link>
           &nbsp;
-          收到了一条来自【{meta.target_name}】评论
+          收到了一条来自【{meta.target_name}】的评论
+        </span>
+      );
+      break;
+    case 'reply-discuss':
+      content = (
+        <span>
+          你在学点【{meta.title}】中的评论收到了一条来自【{meta.target_name}】的回复: {meta.content}          
         </span>
       );
       break;

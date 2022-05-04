@@ -1,19 +1,28 @@
-import NotificationComp from "@/components/Notification";
-import { Empty, Menu, message } from "antd";
 import React, { memo, useEffect, useMemo, useState } from "react";
+import { useRecoilState } from "recoil";
+import NotificationComp from "@/components/Notification";
+import { notificationState } from "@/store";
+import { Badge, Empty, Menu, message } from "antd";
 import styles from "./index.module.scss";
-import { Notification as NotificationType } from '@/model';
 import apis from '@/apis/notification';
+import { Notification as NotificationType } from "@/model";
 
 export interface NotificationPageProps {}
 
 const NotificationPage: React.FC<NotificationPageProps> = () => {
   const [currentTab, setCurrentTab] = useState<'discuss' | 'praise' | 'system'>("discuss");
-  const [notificationList, setNotificationList] = useState<NotificationType[]>([]);
+  const [notificationStateValue, setNotificationState] = useRecoilState(notificationState);
+  const notificationList = useMemo(() => {
+    const list = notificationStateValue.list.map(item => ({
+      ...item,
+      meta: JSON.parse((item.meta ?? '{}')),
+    })).reverse();
+    return list;
+  }, [notificationStateValue]);
   const currentList = useMemo(() => {
     switch (currentTab) {
       case 'discuss':
-        return notificationList.filter(item => item.type === 'discuss');
+        return notificationList.filter(item => ['top-discuss', 'reply-discuss'].includes(item.type));
       case 'praise':
         return notificationList.filter(item => item.type === 'praise');
       case 'system':
@@ -22,23 +31,29 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
   }, [currentTab, notificationList]);
   const empty = currentList.length === 0;
 
+  function getUnReadCountByTypes(types: NotificationType['type'][]) {
+    return notificationList.reduce((total, item) => {
+      if (types.includes(item.type)) {
+        return total + item.readed ? 0 : 1;
+      }
+      return total;
+    }, 0);
+  }
+
   useEffect(() => {
     apis.getNotificationList()
       .then(res => {
         if (res.code !== 1) {
           throw new Error(res.message);
         }
-        const list = res.data.map(item => ({
-          ...item,
-          meta: JSON.parse((item.meta ?? '{}')),
-        })).reverse();
-        setNotificationList(list);
+        const allList = res.data;
+        const unReadCount = allList.reduce((total, item) => total + item.readed ? 0 : 1, 0);
+        setNotificationState({ unReadCount, list: allList });
       })
       .catch((error) => {
         message.error(error);
       });
-  }, []);
-  console.log({currentList});
+  }, [notificationStateValue.unReadCount]);
 
   return (
     <div className={styles.NotificationPage}>
@@ -49,13 +64,13 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
         mode="horizontal"
       >
         <Menu.Item key="discuss">
-          评论消息
+          <Badge count={getUnReadCountByTypes(['top-discuss', 'reply-discuss'])} size='small'>评论消息</Badge>
         </Menu.Item>
         <Menu.Item key="praise">
-          点赞消息
+          <Badge count={getUnReadCountByTypes(['praise'])} size='small'>点赞消息</Badge>
         </Menu.Item>
         <Menu.Item key="system">
-          系统消息
+          <Badge count={getUnReadCountByTypes(['provider_apply', 'study_item_apply'])} size='small'>系统消息</Badge>
         </Menu.Item>
       </Menu>
 

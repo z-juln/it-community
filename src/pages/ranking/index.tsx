@@ -30,7 +30,7 @@ const Ranking: React.FC<RankingProps> = () => {
           <li key={userInfo.uid}>
             <div className={styles.rank}>{index + 1}</div>
             <div className={styles.userInfo}>{userInfo.name}</div>
-            <p className={styles.point}>{point}</p>
+            <p className={styles.point}>{point.toFixed(0)}</p>
           </li>
         ))}
         {meUserInfo ? <li className={styles.me}>
@@ -38,7 +38,7 @@ const Ranking: React.FC<RankingProps> = () => {
             <>
               <div className={styles.rank}>{myIndex + 1}</div>
               <div className={styles.userInfo}>我: {myRankInfo?.userInfo.name}</div>
-              <p className={styles.point}>{myRankInfo?.point}</p>
+              <p className={styles.point}>{myRankInfo?.point.toFixed(0)}</p>
             </>
           ) : '你尚未上榜'}
         </li> : null}
