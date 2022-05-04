@@ -1,7 +1,7 @@
-import React, { memo, useEffect, useMemo, useState } from "react";
+import React, { memo, useMemo, useState } from "react";
 import { useRecoilState } from "recoil";
 import NotificationComp from "@/components/Notification";
-import { notificationState } from "@/store";
+import { notificationState, userInfoState } from "@/store";
 import { Badge, Empty, Menu, message } from "antd";
 import styles from "./index.module.scss";
 import apis from '@/apis/notification';
@@ -10,15 +10,16 @@ import { Notification as NotificationType } from "@/model";
 export interface NotificationPageProps {}
 
 const NotificationPage: React.FC<NotificationPageProps> = () => {
-  const [currentTab, setCurrentTab] = useState<'discuss' | 'praise' | 'system'>("discuss");
   const [notificationStateValue, setNotificationState] = useRecoilState(notificationState);
+  const [currentTab, setCurrentTab] = useState<'discuss' | 'praise' | 'system'>("discuss");
+
   const notificationList = useMemo(() => {
     const list = notificationStateValue.list.map(item => ({
       ...item,
       meta: JSON.parse((item.meta ?? '{}')),
     })).reverse();
     return list;
-  }, [notificationStateValue]);
+  }, [notificationStateValue.list]);
   const currentList = useMemo(() => {
     switch (currentTab) {
       case 'discuss':
@@ -39,21 +40,6 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
       return total;
     }, 0);
   }
-
-  useEffect(() => {
-    apis.getNotificationList()
-      .then(res => {
-        if (res.code !== 1) {
-          throw new Error(res.message);
-        }
-        const allList = res.data;
-        const unReadCount = allList.reduce((total, item) => total + item.readed ? 0 : 1, 0);
-        setNotificationState({ unReadCount, list: allList });
-      })
-      .catch((error) => {
-        message.error(error);
-      });
-  }, [notificationStateValue.unReadCount]);
 
   return (
     <div className={styles.NotificationPage}>

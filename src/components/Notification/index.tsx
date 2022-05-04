@@ -1,24 +1,26 @@
 import React, { memo, useEffect, useRef, useState } from "react";
-import { useSetRecoilState } from "recoil";
-import { notificationState } from "@/store";
 import styles from "./index.module.scss";
 import type { CommonProps } from "@/@types/global";
 import Notification from "@/model/notification";
 import { Link } from "react-router-dom";
 import { getPlainTime } from "@/utils";
 import apis from '@/apis/notification';
+import { useReset as useNotificationReset } from "@/pages/Notification/utils";
 
 export interface NotificationProps extends CommonProps {
   data: Notification;
+  onRead?: () => void;
 }
 
 const NotificationComp: React.FC<NotificationProps> = ({
   className = "",
   style = {},
   data,
+  onRead,
 }) => {
   const { id, type, time, meta = null, readed: initReaded } = data;
-  const setNotificationState = useSetRecoilState(notificationState);
+
+  const notificationReset = useNotificationReset();
   const [readed, setReaded] = useState(initReaded);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -31,10 +33,8 @@ const NotificationComp: React.FC<NotificationProps> = ({
             .then(res => {
               if (res.code === 1 && res.data) {
                 setReaded(1);
-                setNotificationState((state) => ({
-                  ...state,
-                  unReadCount: state.unReadCount - 1
-                }));
+                notificationReset();
+                onRead?.();
               }
             });
           clearTimeout(timer);

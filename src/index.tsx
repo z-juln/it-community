@@ -3,7 +3,7 @@ import ReactDOM from "react-dom";
 import { RecoilRoot } from "recoil";
 import reportWebVitals from "@/reportWebVitals";
 import Router from "./router";
-import useNotificationInit from "./pages/Notification/init";
+import { useInit as useNotificationInit } from "./pages/Notification/utils";
 import "antd/dist/antd.css";
 import "@/styles/global.scss";
 import "juln-color";
