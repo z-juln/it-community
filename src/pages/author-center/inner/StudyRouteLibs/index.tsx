@@ -19,7 +19,7 @@ export interface FormField {
 }
 
 export interface StudyRouteLibsProps extends CommonProps {
-  setTab?: React.Dispatch<React.SetStateAction<TabKey>>;
+  setTab?: (tab: TabKey) => void;
 }
 
 const StudyRouteLibs: React.FC<StudyRouteLibsProps> = ({
@@ -46,7 +46,7 @@ const StudyRouteLibs: React.FC<StudyRouteLibsProps> = ({
   return (
     <div className={`${className} ${styles.StudyRouteLibs}`} style={style}>
       <h2>
-        <span>我的学库</span>
+        <span>我的学习路线</span>
         <Button
           className={styles.createLink}
           type='link'

@@ -6,6 +6,8 @@ import { Link } from "react-router-dom";
 import { getPlainTime } from "@/utils";
 import apis from '@/apis/notification';
 import { useReset as useNotificationReset } from "@/pages/Notification/utils";
+import { useSetRecoilState } from "recoil";
+import { notificationState } from "@/store";
 
 export interface NotificationProps extends CommonProps {
   data: Notification;
@@ -20,7 +22,7 @@ const NotificationComp: React.FC<NotificationProps> = ({
 }) => {
   const { id, type, time, meta = null, readed: initReaded } = data;
 
-  const notificationReset = useNotificationReset();
+  const setNotificationState = useSetRecoilState(notificationState);
   const [readed, setReaded] = useState(initReaded);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -33,8 +35,8 @@ const NotificationComp: React.FC<NotificationProps> = ({
             .then(res => {
               if (res.code === 1 && res.data) {
                 setReaded(1);
-                notificationReset();
                 onRead?.();
+                window.location.reload();
               }
             });
           clearTimeout(timer);

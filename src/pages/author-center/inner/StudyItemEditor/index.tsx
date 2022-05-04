@@ -234,6 +234,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
             style={{ width: 120 }}
             placeholder="请选择"
             onChange={setSelectedStudySetId}
+            // open={true}
           >
             {studySetList.map((studySet) => (
               <Select.Option key={studySet.id} value={studySet.id}>

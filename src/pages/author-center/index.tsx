@@ -1,6 +1,7 @@
 import React, { memo, useEffect, useMemo, useState } from "react";
 import { useRecoilValue } from "recoil";
 import { Button, Menu } from "antd";
+import useUrlState from "@ahooksjs/use-url-state";
 import { Apply as ApplyType, User, UserRole } from "@/model";
 import Apply from "./inner/apply";
 import { userInfoState } from "@/store";
@@ -27,8 +28,10 @@ export enum TabKey {
 export interface AuthorCenterProps {}
 
 const AuthorCenter: React.FC<AuthorCenterProps> = () => {
+  const [query, setQuery] = useUrlState({ tab: TabKey.studyRouteLibs });
   const [showApplyPage, setShowApplyPage] = useState(false);
-  const [tab, setTab] = useState(TabKey.studyRouteLibs);
+  const tab = query.tab as TabKey;
+  const setTab = (tab: TabKey) => setQuery({ tab });
   const userInfo = useRecoilValue(userInfoState);
   const [applyStatus, setApplyStatus] = useState<ApplyType['status'] | null>(null);
 

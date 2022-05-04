@@ -19,7 +19,7 @@ export interface FormField {
 }
 
 export interface StudySetCreationProps extends CommonProps {
-  setTab?: React.Dispatch<React.SetStateAction<TabKey>>;
+  setTab?: (tab: TabKey) => void;
 }
 
 const StudySetLibs: React.FC<StudySetCreationProps> = ({

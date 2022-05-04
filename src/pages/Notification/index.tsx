@@ -1,17 +1,21 @@
-import React, { memo, useMemo, useState } from "react";
-import { useRecoilState } from "recoil";
+import React, { memo, useCallback, useMemo, useState } from "react";
+import { useRecoilValue } from "recoil";
 import NotificationComp from "@/components/Notification";
-import { notificationState, userInfoState } from "@/store";
-import { Badge, Empty, Menu, message } from "antd";
+import { notificationState } from "@/store";
+import { Badge, Empty, Menu } from "antd";
 import styles from "./index.module.scss";
-import apis from '@/apis/notification';
+import useUrlState from '@ahooksjs/use-url-state';
 import { Notification as NotificationType } from "@/model";
+
+export type Tab = 'discuss' | 'praise' | 'system';
 
 export interface NotificationPageProps {}
 
 const NotificationPage: React.FC<NotificationPageProps> = () => {
-  const [notificationStateValue, setNotificationState] = useRecoilState(notificationState);
-  const [currentTab, setCurrentTab] = useState<'discuss' | 'praise' | 'system'>("discuss");
+  const notificationStateValue = useRecoilValue(notificationState);
+  const [query, setQuery] = useUrlState({ tab: "discuss" });
+  const currentTab = query.tab as Tab;
+  const setCurrentTab = (tab: Tab) => setQuery({ tab });
 
   const notificationList = useMemo(() => {
     const list = notificationStateValue.list.map(item => ({
@@ -32,14 +36,26 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
   }, [currentTab, notificationList]);
   const empty = currentList.length === 0;
 
-  function getUnReadCountByTypes(types: NotificationType['type'][]) {
-    return notificationList.reduce((total, item) => {
-      if (types.includes(item.type)) {
-        return total + item.readed ? 0 : 1;
-      }
-      return total;
-    }, 0);
-  }
+  const getUnReadCountByTypes = useCallback((types: NotificationType['type'][]) => {
+    return notificationList
+      .filter(item => types.includes(item.type) && item.readed == 0)
+      .length
+  }, [notificationList]);
+
+  const discussUnReadCount = useMemo(() =>
+    getUnReadCountByTypes(['top-discuss', 'reply-discuss']),
+    [getUnReadCountByTypes]
+  );
+
+  const praiseUnReadCount = useMemo(() =>
+    getUnReadCountByTypes(['praise']),
+    [getUnReadCountByTypes]
+  );
+
+  const systemUnReadCount = useMemo(() =>
+    getUnReadCountByTypes(['provider_apply', 'study_item_apply']),
+    [getUnReadCountByTypes]
+  );
 
   return (
     <div className={styles.NotificationPage}>
@@ -50,13 +66,13 @@ const NotificationPage: React.FC<NotificationPageProps> = () => {
         mode="horizontal"
       >
         <Menu.Item key="discuss">
-          <Badge count={getUnReadCountByTypes(['top-discuss', 'reply-discuss'])} size='small'>评论消息</Badge>
+          <Badge count={discussUnReadCount} size='small'>评论消息</Badge>
         </Menu.Item>
         <Menu.Item key="praise">
-          <Badge count={getUnReadCountByTypes(['praise'])} size='small'>点赞消息</Badge>
+          <Badge count={praiseUnReadCount} size='small'>点赞消息</Badge>
         </Menu.Item>
         <Menu.Item key="system">
-          <Badge count={getUnReadCountByTypes(['provider_apply', 'study_item_apply'])} size='small'>系统消息</Badge>
+          <Badge count={systemUnReadCount} size='small'>系统消息</Badge>
         </Menu.Item>
       </Menu>
 
