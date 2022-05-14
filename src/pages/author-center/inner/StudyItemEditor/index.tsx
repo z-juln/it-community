@@ -56,10 +56,6 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
   const userInfo = useRecoilValue(userInfoState);
   const [visibleOfTemplateModal, setVisibleOfTemplateModal] = useState(false);
 
-  if (!userInfo) {
-    throw new Error("用户信息不存在");
-  }
-
   const [title, setTitle] = useState("");
   const [studySetList, setStudySetList] = useState<StudySet[]>([]);
   const [selectedStudySetId, setSelectedStudySetId] = useState<
@@ -67,6 +63,42 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
   >(null);
   const articleRef = useRef<HTMLElement>(null);
   const [displayMode, setDisplayMode] = useState(DisplayMode.editing);
+
+  const [tempContentNodes, setTempContentNodes] = useState<ArticleNode[]>([
+    initRow,
+  ]);
+  const finnalyTempContentNodes = useRef<ArticleNode[]>(tempContentNodes);
+
+  const articleContent = useMemo(() => {
+    // console.log({tempContentNodes});
+    return tempContentNodes.map((node, index) => {
+      if (node.$$typeof === "HOST") { // HOST
+        if (typeof node.content !== 'string') {
+          pleaseContactMeFixBug();
+          return;
+        }
+        return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
+      } else { // Material
+        const initCtx = JSON.parse(node.content as string) as MaterialBaseCtx;
+        return (
+          <div contentEditable={false} data-material-key={node.key ?? false}>
+            <Material
+              initCtx={initCtx}
+              showTemplateCtxBox={displayMode === DisplayMode.editing}
+              onChange={(newCtx) => {
+                const targetNode = finnalyTempContentNodes.current[index];
+                targetNode.content = JSON.stringify((JSON.parse(newCtx as string)), null, 0);
+              }}
+            />
+          </div>
+        );
+      }
+    });
+  }, [tempContentNodes, setTempContentNodes, displayMode]);
+
+  if (!userInfo) {
+    throw new Error("用户信息不存在");
+  }
 
   useEffect(() => {
     if (mode !== 'edit' || !editId) return;
@@ -95,35 +127,9 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
       });
   }, [userInfo]);
 
-  const [tempContentNodes, setTempContentNodes] = useState<ArticleNode[]>([
-    initRow,
-  ]);
-  const finnalyTempContentNodes = useRef<ArticleNode[]>(tempContentNodes);
-
   useEffect(() => {
     finnalyTempContentNodes.current = tempContentNodes;
   }, [tempContentNodes]);
-  
-  const articleContent = useMemo(() => {
-    return tempContentNodes.map((node, index) => {
-      if (node.$$typeof === "HOST" && typeof node.content === "string") {
-        return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
-      } else if (typeof node.content !== "string") {
-        return (
-          <div contentEditable={false} data-material-key={node.key ?? false}>
-            <Material
-              initCtx={node.content}
-              showTemplateCtxBox={displayMode === DisplayMode.editing}
-              onChange={(newCtx) => {
-                const targetNode = finnalyTempContentNodes.current[index];
-                targetNode.content = JSON.stringify((JSON.parse(newCtx as string)), null, 0);
-              }}
-            />
-          </div>
-        );
-      }
-    });
-  }, [tempContentNodes, setTempContentNodes, displayMode]);
 
   const handleSelect = (ctx: MaterialBaseCtx) => {
     setTempContentNodes((content) => [
@@ -287,3 +293,17 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
 };
 
 export default memo(StudyItemEditor);
+
+function pleaseContactMeFixBug() {
+  message.config({ maxCount: 1 });
+  message.error(
+    <span>
+      系统发生异常，请
+      &nbsp;
+      <a href="/about" style={{color: 'var(--primary_color)',textDecoration: 'var(--primary_color) underline'}}>联系我们</a>
+      &nbsp;
+      进行修复，谢谢
+    </span>,
+    10000,
+  );
+}
