@@ -1,10 +1,10 @@
 import React, { memo } from "react";
-import styles from "./index.module.scss";
-import type { CommonProps } from "@/@types/global";
-import { Avatar } from "antd";
+import { Avatar, message } from "antd";
 import { DiscussWithChildren, SavedUserResult } from "@/model";
 import { CommentOutlined, LikeOutlined } from "@ant-design/icons";
 import { getPlainTime } from "@/utils";
+import styles from "./index.module.scss";
+import type { CommonProps } from "@/@types/global";
 
 export interface CommendProps
   extends CommonProps,
@@ -45,7 +45,10 @@ const Commend: React.FC<CommendProps> = ({
         </div>
         <pre className={styles.content}>{content}</pre>
         <div className={styles.actionBox}>
-          <span className={styles.actionItem}>
+          <span
+            className={styles.actionItem}
+            onClick={() => message.info('功能尚未开放')}
+          >
             <LikeOutlined /> {praise_count}
           </span>
           <span

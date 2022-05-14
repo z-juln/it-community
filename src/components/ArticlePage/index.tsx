@@ -54,7 +54,10 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
     >
       {!contentFullMode && (
         <div className={styles["article-suspended-panel"]}>
-          <div className={`${styles.likeBtn} ${styles.panelBtn}`}>
+          <div
+            className={`${styles.likeBtn} ${styles.panelBtn}`}
+            onClick={() => message.info('功能尚未开放')}
+          >
             <LikeOutlined />
           </div>
           <div
