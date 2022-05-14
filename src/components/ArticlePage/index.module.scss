@@ -77,3 +77,14 @@
     }
   }
 }
+
+.contentFullMode.ArticlePage {
+  min-height: inherit;
+  
+  .rightBody {
+    margin-left: 0;
+    & > article {
+      height: 100%;
+    }
+  }
+}

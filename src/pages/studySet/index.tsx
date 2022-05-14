@@ -27,7 +27,11 @@ const StudySetComp: React.FC<StudySetProps> = () => {
 
   return (
     <div className={styles.StudySet}>
-      <ArticlePage title={`[学库]: ${info?.name || ""}`} commendTree={[]}>
+      <ArticlePage
+        title={`[学库]: ${info?.name || ""}`}
+        commendTree={[]}
+        contentFullMode
+      >
         {items.length ? (
           <ul className={articleStyles.cardList}>
             {items.map((item) => (

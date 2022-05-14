@@ -17,6 +17,7 @@ export interface ArticlePageProps extends CommonProps {
   title: React.ReactNode;
   commendTree: DiscussWithChildren[];
   onReply?: (content: string, topId: number) => Promise<Discuss | null>;
+  contentFullMode?: boolean;
 }
 
 const ArticlePage: React.FC<ArticlePageProps> = ({
@@ -26,6 +27,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
   children,
   commendTree,
   onReply,
+  contentFullMode = false,
 }) => {
   const setPopupLoginPanel = useSetRecoilState(popupLoginPanelState);
   const userInfo = useRecoilValue(userInfoState);
@@ -41,30 +43,39 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
   console.log({ commendTree, commendCount });
 
   return (
-    <div className={`${className} ${styles.ArticlePage}`} style={style}>
-      <div className={styles["article-suspended-panel"]}>
-        <div className={`${styles.likeBtn} ${styles.panelBtn}`}>
-          <LikeOutlined />
+    <div
+      className={`
+        ${className}
+        ${styles.ArticlePage}
+        ${contentFullMode ? styles.contentFullMode : ''}
+      `}
+      style={style}
+    >
+      {!contentFullMode && (
+        <div className={styles["article-suspended-panel"]}>
+          <div className={`${styles.likeBtn} ${styles.panelBtn}`}>
+            <LikeOutlined />
+          </div>
+          <div
+            className={`${styles.commentBtn} ${styles.panelBtn}`}
+            onClick={() => {
+              const commentSectionHead = document.querySelector('#commentSectionHead');
+              if (!commentSectionHead) {
+                throw new Error('commentSectionHead不存在');
+              }
+              commentSectionHead.scrollIntoView();
+            }}
+          >
+            <CommentOutlined />
+          </div>
+          <div
+            className={`${styles.collectBtn} ${styles.panelBtn}`}
+            onClick={() => message.info('功能尚未开放')}
+          >
+            <StarOutlined />
+          </div>
         </div>
-        <div
-          className={`${styles.commentBtn} ${styles.panelBtn}`}
-          onClick={() => {
-            const commentSectionHead = document.querySelector('#commentSectionHead');
-            if (!commentSectionHead) {
-              throw new Error('commentSectionHead不存在');
-            }
-            commentSectionHead.scrollIntoView();
-          }}
-        >
-          <CommentOutlined />
-        </div>
-        <div
-          className={`${styles.collectBtn} ${styles.panelBtn}`}
-          onClick={() => message.info('功能尚未开放')}
-        >
-          <StarOutlined />
-        </div>
-      </div>
+      )}
 
       <div className={styles.rightBody}>
         <article>
@@ -72,66 +83,68 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
           <div className={styles.content}>{children}</div>
         </article>
 
-        <section className={styles.commends}>
-          <h2>评论</h2>
-          <div
-            className={styles.commentForm}
-            onClick={() => setPopupLoginPanel(true)}
-          >
-            <Avatar
-              shape="circle"
-              icon={userInfo ? undefined : <UserOutlined />}
-              src={userInfo?.avatar}
-              style={
-                userInfo ? { color: "#f56a00", backgroundColor: "#fde3cf" } : {}
-              }
+        {!contentFullMode && (
+          <section className={styles.commends}>
+            <h2>评论</h2>
+            <div
+              className={styles.commentForm}
+              onClick={() => setPopupLoginPanel(true)}
             >
-              {userInfo?.name.toLocaleUpperCase()}
-            </Avatar>
-            <Input.TextArea
-              ref={textAreaRef}
-              className={styles.textarea}
-              size="large"
-              placeholder={
-                targetReplyInfo
-                  ? `回复${targetReplyInfo.userInfo.name}...`
-                  : "输入评论（Enter换行，⌘ + Enter发送）"
-              }
-              onBlurCapture={() => setTargetReplyInfo(null)}
-              onKeyDownCapture={async (e) => {
-                const { currentTarget } = e;
-                if (e.metaKey && e.key === "Enter") {
-                  const resultDiscuss = await onReply?.(
-                    currentTarget.value,
-                    targetReplyInfo?.discussId ?? -1
-                  );
-                  if (resultDiscuss) {
-                    setTargetReplyInfo(null);
-                    currentTarget.blur();
-                  }
+              <Avatar
+                shape="circle"
+                icon={userInfo ? undefined : <UserOutlined />}
+                src={userInfo?.avatar}
+                style={
+                  userInfo ? { color: "#f56a00", backgroundColor: "#fde3cf" } : {}
                 }
-              }}
-            />
-          </div>
-
-          <>
-            <h2 id="commentSectionHead">全部评论 {commendCount}</h2>
-
-            <ul className={styles.commendTree}>
-              <CommendTree
-                treeData={commendTree}
-                onReplay={(userInfo, discussId) => {
-                  const textArea = textAreaRef.current!;
-                  textArea.focus();
-                  setTargetReplyInfo({
-                    userInfo,
-                    discussId,
-                  });
+              >
+                {userInfo?.name.toLocaleUpperCase()}
+              </Avatar>
+              <Input.TextArea
+                ref={textAreaRef}
+                className={styles.textarea}
+                size="large"
+                placeholder={
+                  targetReplyInfo
+                    ? `回复${targetReplyInfo.userInfo.name}...`
+                    : "输入评论（Enter换行，⌘ + Enter发送）"
+                }
+                onBlurCapture={() => setTargetReplyInfo(null)}
+                onKeyDownCapture={async (e) => {
+                  const { currentTarget } = e;
+                  if (e.metaKey && e.key === "Enter") {
+                    const resultDiscuss = await onReply?.(
+                      currentTarget.value,
+                      targetReplyInfo?.discussId ?? -1
+                    );
+                    if (resultDiscuss) {
+                      setTargetReplyInfo(null);
+                      currentTarget.blur();
+                    }
+                  }
                 }}
               />
-            </ul>
-          </>
-        </section>
+            </div>
+
+            <>
+              <h2 id="commentSectionHead">全部评论 {commendCount}</h2>
+
+              <ul className={styles.commendTree}>
+                <CommendTree
+                  treeData={commendTree}
+                  onReplay={(userInfo, discussId) => {
+                    const textArea = textAreaRef.current!;
+                    textArea.focus();
+                    setTargetReplyInfo({
+                      userInfo,
+                      discussId,
+                    });
+                  }}
+                />
+              </ul>
+            </>
+          </section>
+        )}
       </div>
     </div>
   );

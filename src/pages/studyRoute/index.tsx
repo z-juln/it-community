@@ -28,6 +28,7 @@ const StudyRouteComp: React.FC<StudyRouteProps> = () => {
       <ArticlePage
         title={`[学习路线]: ${studyRoute?.name || ""}`}
         commendTree={[]}
+        contentFullMode
       >
         {studyRoute?.nodes.length ?
           <StudyRouteLine className={articleStyles.cardList} data={studyRoute} />
