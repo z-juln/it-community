@@ -44,6 +44,7 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
 
   return (
     <div
+      id="ArticlePage"
       className={`
         ${className}
         ${styles.ArticlePage}
@@ -59,11 +60,15 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
           <div
             className={`${styles.commentBtn} ${styles.panelBtn}`}
             onClick={() => {
-              const commentSectionHead = document.querySelector('#commentSectionHead');
+              const commentSectionHead = document.querySelector<HTMLDivElement>('#commentSectionHead');
+              const scrollWrapper = document.querySelector<HTMLDivElement>('html')!;
               if (!commentSectionHead) {
                 throw new Error('commentSectionHead不存在');
               }
-              commentSectionHead.scrollIntoView();
+              if (!scrollWrapper) {
+                throw new Error('scrollWrapper不存在');
+              }
+              scrollWrapper.scrollTop = commentSectionHead.offsetTop - 60;
             }}
           >
             <Badge count={commendCount} size='small'>
