@@ -22,6 +22,15 @@
       &:hover {
         box-shadow: 0 0 4px var(--mask);
       }
+
+      :global(.ant-badge) {
+        :global(span[role="img"]) {
+          transform: scale(1.4);
+        }
+        :global(.ant-badge-count) {
+          transform: translate(80%, -90%);
+        }
+      }
     }
   }
 

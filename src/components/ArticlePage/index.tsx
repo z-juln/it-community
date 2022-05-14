@@ -1,7 +1,7 @@
 import React, { memo, useMemo, useRef, useState } from "react";
 import { useRecoilValue, useSetRecoilState } from "recoil";
 import { popupLoginPanelState, userInfoState } from "@/store";
-import { Avatar, Input, message } from "antd";
+import { Avatar, Badge, Input, message } from "antd";
 import {
   CommentOutlined,
   LikeOutlined,
@@ -66,7 +66,9 @@ const ArticlePage: React.FC<ArticlePageProps> = ({
               commentSectionHead.scrollIntoView();
             }}
           >
-            <CommentOutlined />
+            <Badge count={commendCount} size='small'>
+              <CommentOutlined />
+            </Badge>
           </div>
           <div
             className={`${styles.collectBtn} ${styles.panelBtn}`}
