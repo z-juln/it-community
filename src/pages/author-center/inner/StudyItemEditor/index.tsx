@@ -79,7 +79,12 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
         }
         return <div dangerouslySetInnerHTML={{ __html: node.content }}></div>;
       } else { // Material
-        const initCtx = JSON.parse(node.content as string) as MaterialBaseCtx;
+        let initCtx: MaterialBaseCtx;
+        if (typeof node.content === 'string') {
+          initCtx = JSON.parse(node.content as string);
+        } else {
+          initCtx = node.content;
+        }
         return (
           <div contentEditable={false} data-material-key={node.key ?? false}>
             <Material
