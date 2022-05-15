@@ -70,7 +70,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
   const finnalyTempContentNodes = useRef<ArticleNode[]>(tempContentNodes);
 
   const articleContent = useMemo(() => {
-    // console.log({tempContentNodes});
+    console.log({ tempContentNodes });
     return tempContentNodes.map((node, index) => {
       if (node.$$typeof === "HOST") { // HOST
         if (typeof node.content !== 'string') {
@@ -144,7 +144,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
     ]);
   };
 
-  const getSubmitData = () => {
+  const getContentNodes = () => {
     const splitStr = "--@it@--";
     const articleNativeElement = articleRef.current;
     if (!articleNativeElement) {
@@ -189,15 +189,13 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
       return;
     }
 
-    const data = getSubmitData();
-    const dataStr = JSON.stringify(data);
-    console.log({ content: data, dataStr });
-    (window as any).dataStr = dataStr;
-    (window as any).content = data;
+    const contentNodes = getContentNodes();
+    const contentJSONStr = JSON.stringify(contentNodes);
+    console.log({ content: contentNodes, contentJSONStr });
     apis
       .postArticle({
         setId: selectedStudySetId,
-        content: dataStr,
+        content: contentJSONStr,
         detail: "",
         title,
         articleId: (mode === 'edit' && editId) ? +editId : -1,
