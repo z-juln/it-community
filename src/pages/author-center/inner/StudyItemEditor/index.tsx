@@ -81,7 +81,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
       } else { // Material
         let initCtx: MaterialBaseCtx;
         if (typeof node.content === 'string') {
-          initCtx = JSON.parse(node.content as string);
+          initCtx = JSON.parse(node.content);
         } else {
           initCtx = node.content;
         }
