@@ -137,6 +137,7 @@ const StudyItemEditor: React.FC<StudyItemEditorProps> = ({
   }, [tempContentNodes]);
 
   const handleSelect = (ctx: MaterialBaseCtx) => {
+    // TODO 在鼠标光标位置插入
     setTempContentNodes((content) => [
       ...content,
       br,
